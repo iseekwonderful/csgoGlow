@@ -45,12 +45,8 @@ void readPlayerPointAndHealth(task_t task, task_t taskSelf, mach_vm_address_t im
             continue;
         if (readIntMam(task, taskSelf, memoryAddress + 0xe4, &playerTeamNum)) 
             continue;
-        printf("I teamnum is %i playerteamnum is %i\n", playerTeamNum, iTeamNum);
-        if (playerTeamNum == iTeamNum || playerTeamNum == 0) 
+        if (playerTeamNum == 0 || playerTeamNum == iTeamNum || playerTeamNum == 0) 
             continue;
-        if (playerTeamNum == 0) {
-            continue;
-        }
         struct Color color;
         color.red = (100 - health) / 100.0;
         color.blue = 0.0f;
