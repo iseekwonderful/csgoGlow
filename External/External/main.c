@@ -107,6 +107,7 @@ int main(int argc, const char * argv[]) {
     printf("glow loop address is 0x%x", glowObjectLoopStartAddress);
     // Apply Glow
     while (1) {
+		localbaseInformation(csgo, current, clientBase, &iTeamNum);
         readPlayerPointAndHealth(csgo, current, clientBase, glowObjectLoopStartAddress, iTeamNum);
         //break;
         usleep(20000);
