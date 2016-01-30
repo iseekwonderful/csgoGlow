@@ -76,6 +76,14 @@ void glowInfo(task_t task, task_t current, mach_vm_address_t imgbase, uint32_t *
     readIntMam(task, current, imgbase + glowInfoOffset + glowObjectLoopCount, count);
 }
 
+void localbaseInformation(task_t task, task_t taskSelf, mach_vm_address_t imgbase, int * i_teamNum){
+    // read localbaseStartaDDress
+    uint32_t localBase;
+    readUint32Mam(task, taskSelf, imgbase + 0xED1854, &localBase);
+    // read icrossHairID
+    readUint32Mam(task, taskSelf, localBase + 0xe4, i_teamNum);
+}
+
 
 int main(int argc, const char * argv[]) {
     task_t csgo, current;
@@ -91,13 +99,15 @@ int main(int argc, const char * argv[]) {
     printf("Client start at 0x%x and engine start at 0x%x", clientBase, EngineBase);
     printf("csgo task is %i pid is %i current task is %i\n", csgo, pid, current);
     // collect info
+    int iTeamNum;
     int glowObjectLoopCount;
     uint32_t glowObjectLoopStartAddress;
+    localbaseInformation(csgo, current, clientBase, &iTeamNum);
     glowInfo(csgo, current, clientBase, &glowObjectLoopStartAddress, &glowObjectLoopCount);
     printf("glow loop address is 0x%x", glowObjectLoopStartAddress);
     // Apply Glow
     while (1) {
-        readPlayerPointAndHealth(csgo, current, clientBase, glowObjectLoopStartAddress, 2);
+        readPlayerPointAndHealth(csgo, current, clientBase, glowObjectLoopStartAddress, iTeamNum);
         //break;
         usleep(20000);
     }
