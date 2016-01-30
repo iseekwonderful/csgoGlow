@@ -81,8 +81,8 @@ int main(int argc, const char * argv[]) {
     task_for_pid(current_task(), getpid(), &current);
     csgo = get_client_module_info(current_task(), current_task(), pid, imgBase, a, 2);
     task_for_pid(current_task(), getpid(), &current);
-    uint32_t clientBase = * imgBase;
-    uint32_t EngineBase = * (imgBase + 1);
+    uint32_t clientBase = * imgBase[0];
+    uint32_t EngineBase = * imgBase[1];
     printf("Client start at 0x%x and engine start at 0x%x", clientBase, EngineBase);
     printf("csgo task is %i pid is %i current task is %i\n", csgo, pid, current);
     // collect info
