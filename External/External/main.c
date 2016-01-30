@@ -22,11 +22,8 @@ struct Color {
 
 void applyGlowEffect(task_t task, uint32_t glowStartAddress, int glowObjectIndex, struct Color * color){
     bool stat = 1;
-	    vm_write(task, glowStartAddress + 0x38 * glowObjectIndex + 0x24, (vm_offset_t) &stat, sizeof(bool));
-    vm_write(task, glowStartAddress + 0x38 * glowObjectIndex + 0x4, (vm_offset_t) &(color->red), 4);
-    vm_write(task, glowStartAddress + 0x38 * glowObjectIndex + 0x8, (vm_offset_t) &(color->green), 4);
-    vm_write(task, glowStartAddress + 0x38 * glowObjectIndex + 0xc, (vm_offset_t) &(color->blue), 4);
-    vm_write(task, glowStartAddress + 0x38 * glowObjectIndex + 0x10, (vm_offset_t) &(color->alpha), 4);
+	vm_write(task, glowStartAddress + 0x38 * glowObjectIndex + 0x24, (vm_offset_t) &stat, sizeof(bool));
+    vm_write(task, glowStartAddress + 0x38 * glowObjectIndex + 0x4, (vm_offset_t) &color, sizeof(Color));
 }
 
 void readPlayerPointAndHealth(task_t task, task_t taskSelf, mach_vm_address_t imgbase, uint32_t startAddress, int iTeamNum) {
