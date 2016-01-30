@@ -59,11 +59,9 @@ void readPlayerPointAndHealth(mach_vm_address_t imgbase, uint32_t startAddress, 
     }
 }
 
-void glowInfo(mach_vm_address_t imgbase, uint32_t * address, int * count){
+void glowInfo(mach_vm_address_t imgbase, uint32_t * address){
     int glowInfoOffset = 0xF2C140;
-    int glowObjectLoopCount = 0xC;
     readUint32Mam(csgo, current, imgbase + glowInfoOffset, address);
-    readIntMam(csgo, current, imgbase + glowInfoOffset + glowObjectLoopCount, count);
 }
 
 void localbaseInformation(mach_vm_address_t imgbase, int * i_teamNum){
@@ -90,10 +88,9 @@ int main(int argc, const char * argv[]) {
     printf("csgo task is %i pid is %i current task is %i\n", csgo, pid, current);
     // collect info
     int iTeamNum;
-    int glowObjectLoopCount;
     uint32_t glowObjectLoopStartAddress;
     localbaseInformation(clientBase, &iTeamNum);
-    glowInfo(clientBase, &glowObjectLoopStartAddress, &glowObjectLoopCount);
+    glowInfo(clientBase, &glowObjectLoopStartAddress);
     printf("glow loop address is 0x%x", glowObjectLoopStartAddress);
     // Apply Glow
     while (1) {
