@@ -34,26 +34,20 @@ void readPlayerPointAndHealth(task_t task, task_t taskSelf, mach_vm_address_t im
     printf("----------updated----------\n");
     for (int i = 0; i < 0x60; i++) {
         int playerTeamNum;
-        if (readIntMam(task, taskSelf, imgbase + playerBase + 0x10 * i, &memoryAddress) == -1) {
+        if (readIntMam(task, taskSelf, imgbase + playerBase + 0x10 * i, &memoryAddress) == -1)
             continue;
-        }
-        if (memoryAddress == 0x0){
+        if (memoryAddress == 0x0)
             continue;
-        }
-        if (readIntMam(task, taskSelf, memoryAddress + 0xA2D0, &glowIndex)) {
+        if (readIntMam(task, taskSelf, memoryAddress + 0xA2D0, &glowIndex)) 
             continue;
-        }
         int health;
-        if (readIntMam(task, taskSelf, memoryAddress + 0xf0, &health)) {
+        if (readIntMam(task, taskSelf, memoryAddress + 0xf0, &health)) 
             continue;
-        }
-        if (readIntMam(task, taskSelf, memoryAddress + 0xe4, &playerTeamNum)) {
+        if (readIntMam(task, taskSelf, memoryAddress + 0xe4, &playerTeamNum)) 
             continue;
-        }
         printf("I teamnum is %i playerteamnum is %i\n", playerTeamNum, iTeamNum);
-        if (playerTeamNum == iTeamNum || playerTeamNum == 0) {
+        if (playerTeamNum == iTeamNum || playerTeamNum == 0) 
             continue;
-        }
         if (playerTeamNum == 0) {
             continue;
         }
