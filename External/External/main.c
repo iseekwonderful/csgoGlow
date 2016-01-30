@@ -12,7 +12,7 @@
 #include <stdbool.h>
 
 task_t csgo, current;
-uint32_t clientBase,EngineBase;
+uint32_t clientBase;
 struct Color {
     float red;
     float blue;
@@ -77,14 +77,13 @@ int main(int argc, const char * argv[]) {
     
     int pid = get_process("csgo_osx");
     printf("The pid is %i\n", pid);
-    uint32_t * imgBase[2];
-    const char * a[2] = {"/client.dylib", "/engine.dylib"};
+    uint32_t * imgBase;
+    const char * a = "/client.dylib";
     task_for_pid(current_task(), getpid(), &current);
-    csgo = get_client_module_info(current_task(), current_task(), pid, imgBase, a, 2);
+    csgo = get_client_module_info(current_task(), current_task(), pid, imgBase, a, 1);
     task_for_pid(current_task(), getpid(), &current);
-    clientBase = * imgBase[0];
-    EngineBase = * imgBase[1];
-    printf("Client start at 0x%x and engine start at 0x%x", clientBase, EngineBase);
+    clientBase = * imgBase;
+    printf("Client start at 0x%x a", clientBase);
     printf("csgo task is %i pid is %i current task is %i\n", csgo, pid, current);
     // collect info
     int iTeamNum;
