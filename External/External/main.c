@@ -43,7 +43,7 @@ void readPlayerPointAndHealth(mach_vm_address_t imgbase, uint32_t startAddress, 
         int health;
         if (readIntMam(csgo, current, memoryAddress + 0xf0, &health)) //Read Health
             continue;
-		if(health == 0)
+		if(health < 1)
 			continue;
 		int playerTeamNum;
         if (readIntMam(csgo, current, memoryAddress + 0xe4, &playerTeamNum)) //Read Team Number
