@@ -3,4 +3,13 @@ this is a simple external csgo glow on mac osx
 Just modify the code and build it via XCode 7.2
 And run it with root permission
 
-enjoy~ 
+enjoy~
+
+---------About run with root-----------
+It is required to run with root when Read/Write csgo's memory
+So:
+1. Use Command + B compile this project
+2. Right click the binary and find the file path
+3. Open terminal and Using sudo -s to switch to root user (password required)
+using cd go to the application's dir
+4. run ./External (the application we compiled)
