@@ -87,7 +87,7 @@ int get_client_module_info(task_t task, task_t current, pid_t pid, uint32_t * st
     kern_return_t error = task_for_pid(current_task(), pid, &task);
     if (error != KERN_SUCCESS) {
         fprintf(stderr, "[Gaben:WTF]\n");
-        return 0;
+        return -1;
     }
     struct task_dyld_info dyld_info;
     mach_vm_address_t address;
@@ -97,7 +97,7 @@ int get_client_module_info(task_t task, task_t current, pid_t pid, uint32_t * st
         address = dyld_info.all_image_info_addr;
     }else{
         fprintf(stderr ,"failed\n");
-        return 0;
+        return -1;
     }
     struct dyld_all_image_infos *dyldaii;
     mach_msg_type_number_t size = sizeof(struct dyld_all_image_infos);
@@ -105,7 +105,7 @@ int get_client_module_info(task_t task, task_t current, pid_t pid, uint32_t * st
     kern_return_t kr = vm_read(task, address, size, &readMem, &size);
     if (kr != KERN_SUCCESS) {
         fprintf(stderr, "faild");
-        return 0;
+        return -1;
     }
     dyldaii = (struct dyld_all_image_infos *) readMem;
     printf ("Version: %d, %d images at offset %p\n",
@@ -117,7 +117,7 @@ int get_client_module_info(task_t task, task_t current, pid_t pid, uint32_t * st
     kern_return_t kr2 = vm_read(task, (mach_vm_address_t)dyldaii->infoArray, dataCnt, &readMem, &dataCnt);
     if (kr2) {
         printf("get lists failed \n");
-        return 0;
+        return -1;
     }
     struct dyld_image_info *dii = (struct dyld_image_info *) readMem;
     for (int i = 0; i < imageCount; i++) {

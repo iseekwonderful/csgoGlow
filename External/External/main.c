@@ -81,6 +81,10 @@ int main(int argc, const char * argv[]) {
     const char * a[2] = {"/client.dylib", "/engine.dylib"};
     task_for_pid(current_task(), getpid(), &current);
     csgo = get_client_module_info(current_task(), current_task(), pid, imgBase, a, 2);
+    if (csgo == -1) {
+        printf("No root permission\nPlease run it with root\n");
+        exit(0);
+    }
     task_for_pid(current_task(), getpid(), &current);
     clientBase = * imgBase;
     engineBase = * (imgBase + 1);
