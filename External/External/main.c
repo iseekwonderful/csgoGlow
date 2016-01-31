@@ -11,7 +11,8 @@
 #include <unistd.h>
 #include <stdbool.h>
 
-
+task_t csgo, current;
+uint32_t clientBase;
 struct Color {
     float red;
     float blue;
@@ -20,94 +21,80 @@ struct Color {
 };
 
 
-void applyGlowEffect(task_t task, uint32_t glowStartAddress, int glowObjectIndex, struct Color * color){
+void applyGlowEffect(uint32_t glowStartAddress, int glowObjectIndex, struct Color * color){
     bool stat = 1;
-	    vm_write(task, glowStartAddress + 0x38 * glowObjectIndex + 0x24, (vm_offset_t) &stat, sizeof(bool));
-    vm_write(task, glowStartAddress + 0x38 * glowObjectIndex + 0x4, (vm_offset_t) &(color->red), 4);
-    vm_write(task, glowStartAddress + 0x38 * glowObjectIndex + 0x8, (vm_offset_t) &(color->green), 4);
-    vm_write(task, glowStartAddress + 0x38 * glowObjectIndex + 0xc, (vm_offset_t) &(color->blue), 4);
-    vm_write(task, glowStartAddress + 0x38 * glowObjectIndex + 0x10, (vm_offset_t) &(color->alpha), 4);
+	vm_write(csgo, glowStartAddress + 0x38 * glowObjectIndex + 0x24, (vm_offset_t) &stat, sizeof(bool));
+    vm_write(csgo, glowStartAddress + 0x38 * glowObjectIndex + 0x4, (vm_offset_t) &color, sizeof(Color));
 }
 
-void readPlayerPointAndHealth(task_t task, task_t taskSelf, mach_vm_address_t imgbase, uint32_t startAddress, int iTeamNum) {
+void readPlayerPointAndHealth(mach_vm_address_t imgbase, uint32_t startAddress, int iTeamNum) {
     int m_iGlowIndex = 0xA2D0;
     uint32_t memoryAddress;
     int glowIndex;
     int playerBase = 0xED1844;
     printf("----------updated----------\n");
     for (int i = 0; i < 0x60; i++) {
-        int playerTeamNum;
-        if (readIntMam(task, taskSelf, imgbase + playerBase + 0x10 * i, &memoryAddress) == -1) {
+        if (readIntMam(csgo, current, imgbase + playerBase + 0x10 * i, &memoryAddress) == -1)//Entetiy address
             continue;
-        }
-        if (memoryAddress == 0x0){
+        if (memoryAddress == 0x0)//is nullpointer
             continue;
-        }
-        if (readIntMam(task, taskSelf, memoryAddress + 0xA2D0, &glowIndex)) {
+        if (readIntMam(csgo, current, memoryAddress + 0xA2D0, &glowIndex)) //Read GlowIndex
             continue;
-        }
         int health;
-        if (readIntMam(task, taskSelf, memoryAddress + 0xf0, &health)) {
+        if (readIntMam(csgo, current, memoryAddress + 0xf0, &health)) //Read Health
             continue;
-        }
-        if (readIntMam(task, taskSelf, memoryAddress + 0xe4, &playerTeamNum)) {
+		if(health < 1)
+			continue;
+		int playerTeamNum;
+        if (readIntMam(csgo, current, memoryAddress + 0xe4, &playerTeamNum)) //Read Team Number
             continue;
-        }
-        printf("I teamnum is %i playerteamnum is %i\n", playerTeamNum, iTeamNum);
-        if (playerTeamNum == iTeamNum || playerTeamNum == 0) {
+        if (playerTeamNum == 0 || playerTeamNum == iTeamNum || playerTeamNum == 0) 
             continue;
-        }
-        if (playerTeamNum == 0) {
-            continue;
-        }
         struct Color color;
         color.red = (100 - health) / 100.0;
         color.blue = 0.0f;
         color.green = (health) / 100.0;
         color.alpha = 0.8f;
-        applyGlowEffect(task, startAddress, glowIndex, &color);
+        applyGlowEffect(csgo, startAddress, glowIndex, &color);
     }
 }
 
-void glowInfo(task_t task, task_t current, mach_vm_address_t imgbase, uint32_t * address, int * count){
+void glowInfo(mach_vm_address_t imgbase, uint32_t * address){
     int glowInfoOffset = 0xF2C140;
-    int glowObjectLoopCount = 0xC;
-    readUint32Mam(task, current, imgbase + glowInfoOffset, address);
-    readIntMam(task, current, imgbase + glowInfoOffset + glowObjectLoopCount, count);
+    readUint32Mam(csgo, current, imgbase + glowInfoOffset, address);
 }
 
-void localbaseInformation(task_t task, task_t taskSelf, mach_vm_address_t imgbase, int * i_teamNum){
+void localbaseInformation(mach_vm_address_t imgbase, int * i_teamNum){
     // read localbaseStartaDDress
     uint32_t localBase;
-    readUint32Mam(task, taskSelf, imgbase + 0xED1854, &localBase);
+    readUint32Mam(csgo, current, imgbase + 0xED1854, &localBase);
     // read icrossHairID
-    readUint32Mam(task, taskSelf, localBase + 0xe4, i_teamNum);
+    readUint32Mam(csgo, current, localBase + 0xe4, i_teamNum);
 }
 
 
 int main(int argc, const char * argv[]) {
-    task_t csgo, current;
+    
     int pid = get_process("csgo_osx");
     printf("The pid is %i\n", pid);
-    uint32_t * imgBase[2];
-    const char * a[2] = {"/client.dylib", "/engine.dylib"};
+    uint32_t * imgBase;
+    const char * a = "/client.dylib";
     task_for_pid(current_task(), getpid(), &current);
-    csgo = get_client_module_info(current_task(), current_task(), pid, imgBase, a, 2);
+    csgo = get_client_module_info(current_task(), current_task(), pid, imgBase, a, 1);
     task_for_pid(current_task(), getpid(), &current);
-    uint32_t clientBase = * imgBase;
-    uint32_t EngineBase = * (imgBase + 1);
-    printf("Client start at 0x%x and engine start at 0x%x", clientBase, EngineBase);
+    clientBase = * imgBase;
+    printf("Client start at 0x%x a", clientBase);
     printf("csgo task is %i pid is %i current task is %i\n", csgo, pid, current);
     // collect info
     int iTeamNum;
-    int glowObjectLoopCount;
     uint32_t glowObjectLoopStartAddress;
-    localbaseInformation(csgo, current, clientBase, &iTeamNum);
-    glowInfo(csgo, current, clientBase, &glowObjectLoopStartAddress, &glowObjectLoopCount);
+    localbaseInformation(clientBase, &iTeamNum);
+    glowInfo(clientBase, &glowObjectLoopStartAddress);
     printf("glow loop address is 0x%x", glowObjectLoopStartAddress);
     // Apply Glow
     while (1) {
-        readPlayerPointAndHealth(csgo, current, clientBase, glowObjectLoopStartAddress, iTeamNum);
+		localbaseInformation(clientBase, &iTeamNum);
+        readPlayerPointAndHealth(clientBase, glowObjectLoopStartAddress, iTeamNum);
         //break;
         usleep(20000);
     }
