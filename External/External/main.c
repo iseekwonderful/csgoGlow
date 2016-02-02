@@ -131,8 +131,8 @@ void startListen(){
 
 void applyGlowEffect(uint32_t glowStartAddress, int glowObjectIndex, struct Color * color){
     bool stat = 1;
-	vm_write(csgo, glowStartAddress + 0x38 * glowObjectIndex + 0x24, (vm_offset_t) &stat, sizeof(bool));
-    vm_write(csgo, glowStartAddress + 0x38 * glowObjectIndex + 0x4, (vm_offset_t) &(color->red), sizeof(struct Color));
+    vm_write(csgo, glowStartAddress + 0x38 * glowObjectIndex + 0x24, (vm_offset_t) &stat, sizeof(bool));
+    vm_write(csgo, glowStartAddress + 0x38 * glowObjectIndex + 0x4, (vm_offset_t) &color, sizeof(struct Color));
 }
 
 void readPlayerPointAndHealth(mach_vm_address_t imgbase, uint32_t startAddress, int iTeamNum) {
