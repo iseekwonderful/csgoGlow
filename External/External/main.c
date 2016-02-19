@@ -27,7 +27,7 @@ bool ctr = false;
 bool sft = false;
 bool cmd = false;
 bool opt = false;
-bool states = false;
+bool states = true;
 
 // This callback will be invoked every time there is a keystroke.
 //
@@ -139,7 +139,7 @@ void readPlayerPointAndHealth(mach_vm_address_t imgbase, uint32_t startAddress, 
     int m_iGlowIndex = 0xA2D0;
     uint32_t memoryAddress;
     int glowIndex;
-    int playerBase = 0xED1844;
+    int playerBase = 0xee44e4;
     printf("----------updated----------\n");
     for (int i = 0; i < 0x60; i++) {
         if (readIntMam(csgo, current, imgbase + playerBase + 0x10 * i, &memoryAddress) == -1)//Entetiy address
@@ -168,7 +168,7 @@ void readPlayerPointAndHealth(mach_vm_address_t imgbase, uint32_t startAddress, 
 }
 
 void glowInfo(mach_vm_address_t imgbase, uint32_t * address){
-    int glowInfoOffset = 0xF2C140;
+    int glowInfoOffset = 0x01342c00;
     readUint32Mam(csgo, current, imgbase + glowInfoOffset, address);
 }
 
