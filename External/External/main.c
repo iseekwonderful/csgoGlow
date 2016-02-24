@@ -155,11 +155,11 @@ void readPlayerPointAndHealth(mach_vm_address_t imgbase, uint32_t startAddress, 
 		if(health < 1)
 			continue;
 		int playerTeamNum;
-        if (readIntMam(csgo, current, memoryAddress + 0xe4, &playerTeamNum)) //Read Team Number
+        if (readIntMam(csgo, current, memoryAddress + 0xE4, &playerTeamNum)) //Read Team Number
             continue;
         if (playerTeamNum == 0 || playerTeamNum == iTeamNum || playerTeamNum == 0) 
             continue;
-        printf("Read player %i health is %i team is %i\n", i, health, iTeamNum);
+        printf("Read player %i health is %i team is %i\n", i, health, playerTeamNum);
         struct Color color;
         color.red = (100 - health) / 100.0;
         color.blue = 0.0f;
@@ -177,7 +177,7 @@ void glowInfo(mach_vm_address_t imgbase, uint32_t * address){
 void localbaseInformation(mach_vm_address_t imgbase, int * i_teamNum){
     // read localbaseStartaDDress
     uint32_t localBase;
-    readUint32Mam(csgo, current, imgbase + 0xEE4794, &localBase);
+    readUint32Mam(csgo, current, imgbase + 0xEE4794 + 0x10, &localBase);
     // read icrossHairID
     readUint32Mam(csgo, current, localBase + 0xe4, i_teamNum);
 }
