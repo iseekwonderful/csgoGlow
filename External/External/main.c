@@ -140,14 +140,14 @@ void readPlayerPointAndHealth(mach_vm_address_t imgbase, uint32_t startAddress, 
     int m_iGlowIndex = 0xA2D0;
     uint32_t memoryAddress;
     int glowIndex;
-    int playerBase = 0xEE4794;
+    int playerBase = 0xEE47D4;
     printf("----------updated----------\n");
     for (int i = 0; i < 0x60; i++) {
         if (readIntMam(csgo, current, imgbase + playerBase + 0x10 * i, &memoryAddress) == -1)//Entetiy address
             continue;
         if (memoryAddress == 0x0)//is nullpointer
             continue;
-        if (readIntMam(csgo, current, memoryAddress + 0xA2D0, &glowIndex)) //Read GlowIndex
+        if (readIntMam(csgo, current, memoryAddress + 0xA2E0, &glowIndex)) //Read GlowIndex
             continue;
         int health;
         if (readIntMam(csgo, current, memoryAddress + 0xf0, &health)) //Read Health
@@ -159,7 +159,7 @@ void readPlayerPointAndHealth(mach_vm_address_t imgbase, uint32_t startAddress, 
             continue;
         if (playerTeamNum == 0 || playerTeamNum == iTeamNum || playerTeamNum == 0) 
             continue;
-        printf("Read player %i health is %i team is %i\n", i, health, playerTeamNum);
+        printf("Read player %i health is %i team is %i, glow index is %i\n", i, health, playerTeamNum, glowIndex);
         struct Color color;
         color.red = (100 - health) / 100.0;
         color.blue = 0.0f;
@@ -170,14 +170,14 @@ void readPlayerPointAndHealth(mach_vm_address_t imgbase, uint32_t startAddress, 
 }
 
 void glowInfo(mach_vm_address_t imgbase, uint32_t * address){
-    int glowInfoOffset = 0x1342EC0;
+    int glowInfoOffset = 0x1342F00;
     readUint32Mam(csgo, current, imgbase + glowInfoOffset, address);
 }
 
 void localbaseInformation(mach_vm_address_t imgbase, int * i_teamNum){
     // read localbaseStartaDDress
     uint32_t localBase;
-    readUint32Mam(csgo, current, imgbase + 0xEE4794 + 0x10, &localBase);
+    readUint32Mam(csgo, current, imgbase + 0xEE47D4 + 0x10, &localBase);
     // read icrossHairID
     readUint32Mam(csgo, current, localBase + 0xe4, i_teamNum);
 }
