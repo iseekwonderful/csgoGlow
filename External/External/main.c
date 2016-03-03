@@ -140,7 +140,7 @@ void readPlayerPointAndHealth(mach_vm_address_t imgbase, uint32_t startAddress, 
     int m_iGlowIndex = 0xA2D0;
     uint32_t memoryAddress;
     int glowIndex;
-    int playerBase = 0xEE47D4;
+    int playerBase = 0xEE47E4;
     printf("----------updated----------\n");
     for (int i = 0; i < 0x60; i++) {
         if (readIntMam(csgo, current, imgbase + playerBase + 0x10 * i, &memoryAddress) == -1)//Entetiy address
@@ -170,14 +170,14 @@ void readPlayerPointAndHealth(mach_vm_address_t imgbase, uint32_t startAddress, 
 }
 
 void glowInfo(mach_vm_address_t imgbase, uint32_t * address){
-    int glowInfoOffset = 0x1342F00;
+    int glowInfoOffset = 0x1342F10;
     readUint32Mam(csgo, current, imgbase + glowInfoOffset, address);
 }
 
 void localbaseInformation(mach_vm_address_t imgbase, int * i_teamNum){
     // read localbaseStartaDDress
     uint32_t localBase;
-    readUint32Mam(csgo, current, imgbase + 0xEE47D4 + 0x10, &localBase);
+    readUint32Mam(csgo, current, imgbase + 0xEE47E4 + 0x10, &localBase);
     // read icrossHairID
     readUint32Mam(csgo, current, localBase + 0xe4, i_teamNum);
 }
