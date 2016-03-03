@@ -28,6 +28,9 @@ bool sft = false;
 bool cmd = false;
 bool opt = false;
 bool states = true;
+bool uArrow = false;
+bool dArrow = false;
+int playTeam = 0;
 
 // This callback will be invoked every time there is a keystroke.
 //
@@ -93,9 +96,39 @@ CGEventRef myCGEventCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef
         states = !states;
         printf("now states is %i\n", states);
     }
+    //Team T
+    if(keycode == (CGKeyCode)125||keycode == (CGKeyCode)108)
+    {
+        if(dArrow){
+            dArrow = false;
+        }
+        else{
+            dArrow = true;
+        }
+        if(dArrow){
+            playTeam = 2;
+            CGEventSetFlags(event,NX_DOWN_ARROW_KEY|CGEventGetFlags(event));
+        }
+    }
+    //Team CT
+    if(keycode == (CGKeyCode)126||keycode == (CGKeyCode)103)
+    {
+        if(uArrow){
+            uArrow = false;
+        }
+        else{
+            uArrow = true;
+        }
+    if(uArrow){
+        playTeam = 3;
+        CGEventSetFlags(event,NX_UP_ARROW_KEY|CGEventGetFlags(event));
+        }
+    }
     // We must return the event for it to be useful.
     return event;
 }
+
+
 
 void startListen(){
     CFMachPortRef	  eventTap;
@@ -140,7 +173,7 @@ void readPlayerPointAndHealth(mach_vm_address_t imgbase, uint32_t startAddress, 
     int m_iGlowIndex = 0xA2D0;
     uint32_t memoryAddress;
     int glowIndex;
-    int playerBase = 0xEE47D4;
+    int playerBase = 0xEE47E4;
     printf("----------updated----------\n");
     for (int i = 0; i < 0x60; i++) {
         if (readIntMam(csgo, current, imgbase + playerBase + 0x10 * i, &memoryAddress) == -1)//Entetiy address
@@ -157,8 +190,15 @@ void readPlayerPointAndHealth(mach_vm_address_t imgbase, uint32_t startAddress, 
 		int playerTeamNum;
         if (readIntMam(csgo, current, memoryAddress + 0xE4, &playerTeamNum)) //Read Team Number
             continue;
-        if (playerTeamNum == 0 || playerTeamNum == iTeamNum || playerTeamNum == 0) 
+      //Reassign playerTeamNum to Up or Down Arrow Key
+        iTeamNum = playTeam;
+//        iTeamNum = playTeam;
+        if (playerTeamNum == 0 || playerTeamNum == iTeamNum || playerTeamNum == playTeam)
             continue;
+/*        
+    if (playerTeamNum == 0 || playerTeamNum == iTeamNum || playerTeamNum == 0)
+            continue;
+ */
         printf("Read player %i health is %i team is %i, glow index is %i\n", i, health, playerTeamNum, glowIndex);
         struct Color color;
         color.red = (100 - health) / 100.0;
@@ -170,14 +210,14 @@ void readPlayerPointAndHealth(mach_vm_address_t imgbase, uint32_t startAddress, 
 }
 
 void glowInfo(mach_vm_address_t imgbase, uint32_t * address){
-    int glowInfoOffset = 0x1342F00;
+    int glowInfoOffset = 0x1342F10;
     readUint32Mam(csgo, current, imgbase + glowInfoOffset, address);
 }
 
 void localbaseInformation(mach_vm_address_t imgbase, int * i_teamNum){
     // read localbaseStartaDDress
     uint32_t localBase;
-    readUint32Mam(csgo, current, imgbase + 0xEE47D4 + 0x10, &localBase);
+    readUint32Mam(csgo, current, imgbase + 0xEE47E4 + 0x10, &localBase);
     // read icrossHairID
     readUint32Mam(csgo, current, localBase + 0xe4, i_teamNum);
 }
