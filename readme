@@ -19,15 +19,12 @@ enjoy~
 If sth get wrong open a issue plz
 
 ---------About run with root-----------
-It is required to run with root when Read/Write csgo's memory
-So:
-1. Use Command + B compile this project
-2. Right click the binary and find the file path
-3. Open terminal and Using sudo -s to switch to root user (password required)
-using cd go to the application's dir
-4. run ./External (the application we compiled)
+Open Csgo First
+check "Product" -> "Scheme" -> "Edit Scheme" with the "root" selected as Debug method
+Open this project using xcode and hit "run"
 
-plz run with csgo open
+
+
 
 ————————little update ——————
 use CMD + SHIFT + X to open/close glow
