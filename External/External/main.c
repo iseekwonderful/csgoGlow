@@ -210,14 +210,14 @@ void readPlayerPointAndHealth(mach_vm_address_t imgbase, uint32_t startAddress, 
 }
 
 void glowInfo(mach_vm_address_t imgbase, uint32_t * address){
-    int glowInfoOffset = 0x134F6F0;
+    int glowInfoOffset = 0x0134F700;
     readUint32Mam(csgo, current, imgbase + glowInfoOffset, address);
 }
 
 void localbaseInformation(mach_vm_address_t imgbase, int * i_teamNum){
     // read localbaseStartaDDress
     uint32_t localBase;
-    readUint32Mam(csgo, current, imgbase + 0x00EF0F04 + 0x10, &localBase);
+    readUint32Mam(csgo, current, imgbase + 0x00EF0F14 + 0x10, &localBase);
     // read icrossHairID
     readUint32Mam(csgo, current, localBase + 0xe4, i_teamNum);
 }
