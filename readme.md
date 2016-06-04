@@ -6,6 +6,6 @@ Maybe, depends on Gaben
 #### When will update comes?
 depend on whether I am busy
 #### About
-mail: sss3barry@gmail
+mail: sss3barry@gmail.com
 # Best Wish to Tyloo!
 
