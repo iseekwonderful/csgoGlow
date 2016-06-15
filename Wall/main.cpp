@@ -17,7 +17,6 @@
 
 uint64_t glowInfoOffset = 0x5945FF0;
 uint64_t playerBaseAddress = 0x5136728;
-uint64_t playerBase = 0x50b2e78;
 
 
 int m_iGlowIndex = 0xA2E0;
@@ -244,7 +243,7 @@ void readPlayerPointAndHealth(task_t task, task_t taskSelf, mach_vm_address_t im
 //    printf("----------updated----------\n");
     for (int i = 0; i < 60; i++) {
         int playerTeamNum;
-        if (Utils::ReadMemAndDeAllocate<uint64_t>(task, taskSelf, imgbase + playerBase + 0x20 * i, &memoryAddress) == -1) {
+        if (Utils::ReadMemAndDeAllocate<uint64_t>(task, taskSelf, imgbase + playerBaseAddress + 0x20 * i, &memoryAddress) == -1) {
             continue;
         }
         if (memoryAddress <= 0x0){
@@ -324,7 +323,7 @@ int main(int argc, const char * argv[]) {
             int i_teamNum = testLocalPlayerAddress(task, moduleStartAddress);
             readPlayerPointAndHealth(task, current_task(), moduleStartAddress, glowObjectLoopStartAddress, i_teamNum);
         }
-        usleep(100);
+        usleep(80000);
     }
     
 }
