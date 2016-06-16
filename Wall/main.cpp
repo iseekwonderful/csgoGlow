@@ -15,8 +15,9 @@
 #include <ApplicationServices/ApplicationServices.h>
 
 
-uint64_t glowInfoOffset = 0x5945FF0;
-uint64_t playerBaseAddress = 0x5136728;
+uint64_t glowInfoOffset = 0x59472c0;
+uint64_t LocalPlayerBase = 0x51379f8;
+uint64_t playerBase = 0x50b4168;
 
 
 int m_iGlowIndex = 0xA2E0;
@@ -41,7 +42,7 @@ CGEventRef keyBoardCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef 
         return event;
     // The incoming keycode.
     CGKeyCode keycode = (CGKeyCode)CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode);
-//    printf("%i", keycode);
+    //    printf("%i", keycode);
     if(keycode == (CGKeyCode)59||keycode == (CGKeyCode)62){
         if(ctr){
             ctr = false;
@@ -240,10 +241,10 @@ void applyGlowEffect(task_t task, mach_vm_address_t glowStartAddress, int glowOb
 void readPlayerPointAndHealth(task_t task, task_t taskSelf, mach_vm_address_t imgbase, mach_vm_address_t startAddress, int iTeamNum) {
     uint64_t memoryAddress;
     int glowIndex;
-//    printf("----------updated----------\n");
+    //    printf("----------updated----------\n");
     for (int i = 0; i < 60; i++) {
         int playerTeamNum;
-        if (Utils::ReadMemAndDeAllocate<uint64_t>(task, taskSelf, imgbase + playerBaseAddress + 0x20 * i, &memoryAddress) == -1) {
+        if (Utils::ReadMemAndDeAllocate<uint64_t>(task, taskSelf, imgbase + playerBase + 0x20 * i, &memoryAddress) == -1) {
             continue;
         }
         if (memoryAddress <= 0x0){
@@ -265,12 +266,12 @@ void readPlayerPointAndHealth(task_t task, task_t taskSelf, mach_vm_address_t im
         if (playerTeamNum == 0) {
             continue;
         }
-//        bool dormant;
-//        if (Utils::ReadMemAndDeAllocate(task, taskSelf, memoryAddress + 0xee, &dormant)) {
-//            if (dormant == 0) {
-//                continue;
-//            }
-//        }
+        //        bool dormant;
+        //        if (Utils::ReadMemAndDeAllocate(task, taskSelf, memoryAddress + 0xee, &dormant)) {
+        //            if (dormant == 0) {
+        //                continue;
+        //            }
+        //        }
         printf("The memory address read is 0x%x player %i health is %i iteam is %i playerteam is %i \n", memoryAddress, glowIndex, health, iTeamNum, playerTeamNum);
         if (health == 0){
             health = 100;
@@ -283,7 +284,7 @@ void readPlayerPointAndHealth(task_t task, task_t taskSelf, mach_vm_address_t im
 int testLocalPlayerAddress(task_t csgo, uint64_t clientBase){
     uint64_t playerAddress;
     int health, iTeamNum;
-    Utils::ReadMemAndDeAllocate(csgo, current_task(), clientBase + playerBaseAddress, &playerAddress);
+    Utils::ReadMemAndDeAllocate(csgo, current_task(), clientBase + LocalPlayerBase, &playerAddress);
     Utils::ReadMemAndDeAllocate(csgo, current_task(), playerAddress + 0x12c, &health);
     Utils::ReadMemAndDeAllocate(csgo, current_task(), playerAddress + 0x120, &iTeamNum);
     printf("I team is %i and team %i\n", iTeamNum, health);
@@ -323,7 +324,7 @@ int main(int argc, const char * argv[]) {
             int i_teamNum = testLocalPlayerAddress(task, moduleStartAddress);
             readPlayerPointAndHealth(task, current_task(), moduleStartAddress, glowObjectLoopStartAddress, i_teamNum);
         }
-        usleep(80000);
+        usleep(100);
     }
     
 }
