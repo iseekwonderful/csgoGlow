@@ -17,7 +17,7 @@
 
 uint64_t glowInfoOffset = 0x5948470;
 uint64_t LocalPlayerBase = 0x5138BA8;
-uint64_t playerBase = 0x50b4168;
+uint64_t playerBase = 0x50B51F8;
 
 
 int m_iGlowIndex = 0xA2E0;
