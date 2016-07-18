@@ -15,9 +15,9 @@
 #include <ApplicationServices/ApplicationServices.h>
 
 
-uint64_t glowInfoOffset = 0x594B920;
-uint64_t LocalPlayerBase = 0x513C058;
-uint64_t playerBase = 0x50B8698;
+uint64_t glowInfoOffset = 0x594A900;
+uint64_t LocalPlayerBase = 0x513B038;
+uint64_t playerBase = 0x50B7678;
 
 
 int m_iGlowIndex = 0xA2E0;
