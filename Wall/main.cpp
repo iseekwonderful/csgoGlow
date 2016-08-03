@@ -272,7 +272,7 @@ void readPlayerPointAndHealth(task_t task, task_t taskSelf, mach_vm_address_t im
         //                continue;
         //            }
         //        }
-        printf("The memory address read is 0x%x player %i health is %i iteam is %i playerteam is %i \n", memoryAddress, glowIndex, health, iTeamNum, playerTeamNum);
+        //printf("The memory address read is 0x%x player %i health is %i iteam is %i playerteam is %i \n", memoryAddress, glowIndex, health, iTeamNum, playerTeamNum);
         if (health == 0){
             health = 100;
         }
@@ -287,7 +287,7 @@ int testLocalPlayerAddress(task_t csgo, uint64_t clientBase){
     Utils::ReadMemAndDeAllocate(csgo, current_task(), clientBase + LocalPlayerBase, &playerAddress);
     Utils::ReadMemAndDeAllocate(csgo, current_task(), playerAddress + 0x12c, &health);
     Utils::ReadMemAndDeAllocate(csgo, current_task(), playerAddress + 0x120, &iTeamNum);
-    printf("I team is %i and team %i\n", iTeamNum, health);
+    //printf("I team is %i and team %i\n", iTeamNum, health);
     return iTeamNum;
 }
 
