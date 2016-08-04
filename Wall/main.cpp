@@ -14,10 +14,9 @@
 #include "Utils.cpp"
 #include <ApplicationServices/ApplicationServices.h>
 
-
-uint64_t glowInfoOffset = 0x5954c00;
-uint64_t LocalPlayerBase = 0x5145338;
-uint64_t playerBase = 0x50C1F48;
+uint64_t glowInfoOffset = 0x5955F00;
+uint64_t LocalPlayerBase = 0x5146638;
+uint64_t playerBase = 0x50C3248;
 
 
 int m_iGlowIndex = 0xA2E0;
@@ -324,7 +323,7 @@ int main(int argc, const char * argv[]) {
             int i_teamNum = testLocalPlayerAddress(task, moduleStartAddress);
             readPlayerPointAndHealth(task, current_task(), moduleStartAddress, glowObjectLoopStartAddress, i_teamNum);
         }
-        usleep(100);
+        usleep(7800);
     }
     
 }
