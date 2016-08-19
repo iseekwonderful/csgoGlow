@@ -284,8 +284,8 @@ int testLocalPlayerAddress(task_t csgo, uint64_t clientBase){
     uint64_t playerAddress;
     int health, iTeamNum;
     Utils::ReadMemAndDeAllocate(csgo, current_task(), clientBase + LocalPlayerBase, &playerAddress);
-    Utils::ReadMemAndDeAllocate(csgo, current_task(), playerAddress + 0x12c, &health);
-    Utils::ReadMemAndDeAllocate(csgo, current_task(), playerAddress + 0x120, &iTeamNum);
+    Utils::ReadMemAndDeAllocate(csgo, current_task(), playerAddress + 0x134, &health);
+    Utils::ReadMemAndDeAllocate(csgo, current_task(), playerAddress + 0x128, &iTeamNum);
     //printf("I team is %i and team %i\n", iTeamNum, health);
     return iTeamNum;
 }
