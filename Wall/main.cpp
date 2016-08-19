@@ -14,9 +14,9 @@
 #include "Utils.cpp"
 #include <ApplicationServices/ApplicationServices.h>
 
-uint64_t glowInfoOffset = 0x5958F20;
-uint64_t LocalPlayerBase = 0x5149658;
-uint64_t playerBase = 0x50C6228;
+uint64_t glowInfoOffset = 0x595a2d0;
+uint64_t LocalPlayerBase = 0x514aa08;
+uint64_t playerBase = 0x50c7588;
 
 
 int m_iGlowIndex = 0xA2E0;
@@ -253,10 +253,10 @@ void readPlayerPointAndHealth(task_t task, task_t taskSelf, mach_vm_address_t im
             continue;
         }
         int health;
-        if (Utils::ReadMemAndDeAllocate<int>(task, taskSelf, memoryAddress + 0x12c, &health)) {
+        if (Utils::ReadMemAndDeAllocate<int>(task, taskSelf, memoryAddress + 0x134, &health)) {
             continue;
         }
-        if (Utils::ReadMemAndDeAllocate<int>(task, taskSelf, memoryAddress + 0x120, &playerTeamNum)) {
+        if (Utils::ReadMemAndDeAllocate<int>(task, taskSelf, memoryAddress + 0x128, &playerTeamNum)) {
             continue;
         }
         if (playerTeamNum == iTeamNum || playerTeamNum == 0) {
