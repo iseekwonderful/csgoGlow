@@ -361,12 +361,11 @@ void WriteMem(task_t task, mach_vm_address_t address, Type value) {
     vm_write(task, address, (vm_offset_t) &value, sizeof(Type));
 }
 
-void applyGlowEffect(task_t task, mach_vm_address_t glowStartAddress, int glowObjectIndex, Color * color) {
-    WriteMem<bool>(task, glowStartAddress + 0x40 * glowObjectIndex + 0x28, statBool);
-    WriteMem<float>(task, glowStartAddress + 0x40 * glowObjectIndex + 0x8, color->red);
-    WriteMem<float>(task, glowStartAddress + 0x40 * glowObjectIndex + 0xc, color->green);
-    WriteMem<float>(task, glowStartAddress + 0x40 * glowObjectIndex + 0x10, color->blue);
-    WriteMem<float>(task, glowStartAddress + 0x40 * glowObjectIndex + 0x14, color->alpha);
+void applyGlowEffect(task_t task, mach_vm_address_t glowStartAddress, int glowObjectIndex, Color color) {
+    uint64_t glowBaseAddress = glowStartAddress + (0x40 * glowObjectIndex);
+    
+    WriteMem<bool>(task, glowBaseAddress + 0x28, statBool);
+    WriteMem<Color>(task, glowBaseAddress + 0x8, color);
 }
 
 void readPlayerPointAndHealth(task_t task, task_t taskSelf, mach_vm_address_t imgbase, mach_vm_address_t startAddress, int iTeamNum) {
@@ -409,7 +408,7 @@ void readPlayerPointAndHealth(task_t task, task_t taskSelf, mach_vm_address_t im
         }
         
         Color color = {float((100 - health) / 100.0), float((health) / 100.0), 0.0f, 0.8f};
-        applyGlowEffect(task, startAddress, glowIndex, &color);
+        applyGlowEffect(task, startAddress, glowIndex, color);
     }
 }
 
