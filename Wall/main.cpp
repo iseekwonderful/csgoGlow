@@ -14,11 +14,11 @@
 #include "Utils.cpp"
 #include <ApplicationServices/ApplicationServices.h>
 
-uint64_t glowInfoOffset = 0x595b3a0;
-uint64_t LocalPlayerBase = 0x514bad8;
-uint64_t playerBase = 0x50c8658;
+uint64_t glowInfoOffset = 0x595C4A0;
+uint64_t LocalPlayerBase = 0x50B2EB8;
+uint64_t playerBase = 0x50C9748;
 
-int m_iGlowIndex = 0xAC10;
+uint64_t m_iGlowIndex = 0xAC10;
 bool statBool = true;
 
 bool ctr = false;
@@ -213,7 +213,7 @@ CGEventRef keyBoardCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef 
     if (opt) {
         CGEventSetFlags(event, (CGEventFlags)(NX_ALTERNATEMASK | CGEventGetFlags(event)));
     }
-
+    
     CGEventSetIntegerValueField(event, kCGKeyboardEventKeycode, (int64_t)keycode);
     if (cmd && opt && sft) {
         if (keycode == keyCodeForKeyString("\\")) {
@@ -227,8 +227,8 @@ CGEventRef keyBoardCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef 
 }
 
 void keyBoardListen() {
-    CFMachPortRef	  eventTap;
-    CGEventMask		eventMask;
+    CFMachPortRef     eventTap;
+    CGEventMask     eventMask;
     CFRunLoopSourceRef runLoopSource;
     eventMask = ((1 << kCGEventKeyDown) | (1 << kCGEventFlagsChanged));
     eventTap = CGEventTapCreate((CGEventTapLocation)kCGSessionEventTap, (CGEventTapPlacement)kCGHeadInsertEventTap, (CGEventTapOptions)0, eventMask, keyBoardCallback, NULL);
@@ -313,11 +313,11 @@ int get_client_module_info(task_t task, pid_t pid, mach_vm_address_t * start, un
         g_dii[i].imageLoadAddress = dii[i].imageLoadAddress;
         if (strstr(imageName, "/client.dylib") != NULL ){
             *start = (mach_vm_address_t)dii[i].imageLoadAddress;
-//            printf("!!!!!!!!find %s\n, address is 0x%llx \n", imageName, (mach_vm_address_t)dii[i].imageLoadAddress);
+            //            printf("!!!!!!!!find %s\n, address is 0x%llx \n", imageName, (mach_vm_address_t)dii[i].imageLoadAddress);
         }
         if (strstr(imageName, "/engine.dylib") != NULL ){
             *start = (mach_vm_address_t)dii[i].imageLoadAddress;
-//            printf("!!!!!!!!find %s\n, address is 0x%llx \n", imageName, (mach_vm_address_t)dii[i].imageLoadAddress);
+            //            printf("!!!!!!!!find %s\n, address is 0x%llx \n", imageName, (mach_vm_address_t)dii[i].imageLoadAddress);
         }
     }
     return task;
