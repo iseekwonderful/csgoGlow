@@ -9,6 +9,14 @@
 //  Copyright © 2016年 nadp. All rights reserved.
 //
 
+/**
+ *
+ * @toggle key : CTRL + SHIFT + V
+ * Change modifier at line 226
+ * Change keycode at line 227
+ *
+ */
+
 #include <iostream>
 #include "Utils.hpp"
 #include "Utils.cpp"
@@ -24,7 +32,7 @@ bool statBool = true;
 bool ctr = false;
 bool sft = false;
 bool cmd = false;
-bool opt = false;
+bool alt = false;
 bool states = true;
 
 struct Color {
@@ -203,20 +211,20 @@ CGEventRef keyBoardCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef 
     
     //Option
     if (keycode == (CGKeyCode)58 || keycode == (CGKeyCode)61) {
-        if (opt) {
-            opt = false;
+        if (alt) {
+            alt = false;
         } else{
-            opt = true;
+            alt = true;
         }
     }
     
-    if (opt) {
+    if (alt) {
         CGEventSetFlags(event, (CGEventFlags)(NX_ALTERNATEMASK | CGEventGetFlags(event)));
     }
     
     CGEventSetIntegerValueField(event, kCGKeyboardEventKeycode, (int64_t)keycode);
-    if (cmd && opt && sft) {
-        if (keycode == keyCodeForKeyString("\\")) {
+    if (ctr && alt) {
+        if (keycode == keyCodeForKeyString("v")) {
             states = !states;
             printf("State Changed! %s\n", states ? "ON" : "OFF");
         }
