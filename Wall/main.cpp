@@ -11,7 +11,7 @@
 
 /**
  *
- * @toggle key : CTRL + SHIFT + V
+ * @toggle key : CTRL + ALT (OPT) + V
  * Change modifier at line 226
  * Change keycode at line 227
  *
