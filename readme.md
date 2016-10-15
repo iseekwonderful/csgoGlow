@@ -1,10 +1,11 @@
-# Project csgoGlow
+# Project csgoGlow, a 100% FREE and OPEN-SOURCE wallhack for OSX
 
 **Thanks to @gabsens and @e-retailer’s contribution to this project**
 
 ### Hello World
 if you are newbie and have never use Xcode, go and watch @gabsens’s [Video at Youtube](https://www.youtube.com/watch?v=AefIiBg2HKU)
 
+don't get scammed by people trying to make money off of this hack!
 
 ### How to run?
 clone it from github and run it with **ROOT**.
