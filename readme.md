@@ -12,6 +12,9 @@ clone it from github and run it with **ROOT**.
 ### Is it safe?
 Maybe, depends on Gaben
 
+### More features?
+No! We won't implement aimbot, bunnyhop or other stuff to it. This is just a native CS:GO Wallhack.
+
 ## About `Internal`:
 sorry for another delay, there some new trouble.
 
