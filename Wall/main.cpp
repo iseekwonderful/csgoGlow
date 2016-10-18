@@ -22,7 +22,6 @@
 #include "Utils.cpp"
 #include <ApplicationServices/ApplicationServices.h>
 
-client: 0x129000000 19278872
 LocalPlayer: 51dc668
 EntityList : 5158f68
 Glow: 59ebf90
