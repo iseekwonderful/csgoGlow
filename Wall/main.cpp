@@ -22,6 +22,11 @@
 #include "Utils.cpp"
 #include <ApplicationServices/ApplicationServices.h>
 
+client: 0x129000000 19278872
+LocalPlayer: 51dc668
+EntityList : 5158f68
+Glow: 59ebf90
+
 uint64_t glowInfoOffset     = 0x59ec010;
 uint64_t LocalPlayerBase    = 0x51dc6e8;
 uint64_t playerBase         = 0x5158fe8;
