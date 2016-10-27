@@ -10,6 +10,9 @@ don't get scammed by people trying to make money off of this hack!
 ### How to run?
 clone it from github and run it with **ROOT**.
 
+### What if CS:GO updates?
+Nothing. Since there is pattern scanning implemented you don't need to update any Offset-Pointers.
+
 ### Is it safe?
 Maybe, depends on Gaben
 
