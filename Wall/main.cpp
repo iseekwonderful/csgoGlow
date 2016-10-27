@@ -18,13 +18,18 @@
  */
 
 #include <iostream>
-#include "Utils.hpp"
-#include "Utils.cpp"
 #include <ApplicationServices/ApplicationServices.h>
+#include "memory/process.cpp"
 
-uint64_t glowInfoOffset     = 0x59ebf90;
-uint64_t LocalPlayerBase    = 0x51dc668;
-uint64_t playerBase         = 0x5158f68;
+pid_t   mainPid     = g_cProc->get("csgo_osx64");
+task_t  mainTask    = g_cProc->task(mainPid);
+
+#include "memory/manager.cpp"
+#include "memory/scanner.cpp"
+
+uint64_t glowInfoOffset;
+uint64_t LocalPlayerBase;
+uint64_t playerBase;
 
 uint64_t m_iGlowIndex       = 0xAC10;
 bool statBool = true;
@@ -53,7 +58,6 @@ uint16_t keyCodeForKeyString(const char * keyString) {
     if (strcmp(keyString, "x") == 0) return 7;
     if (strcmp(keyString, "c") == 0) return 8;
     if (strcmp(keyString, "v") == 0) return 9;
-    // what is 10?
     if (strcmp(keyString, "b") == 0) return 11;
     if (strcmp(keyString, "q") == 0) return 12;
     if (strcmp(keyString, "w") == 0) return 13;
@@ -97,23 +101,13 @@ uint16_t keyCodeForKeyString(const char * keyString) {
     if (strcmp(keyString, "DELETE") == 0) return 51;
     if (strcmp(keyString, "ENTER") == 0) return 52;
     if (strcmp(keyString, "ESCAPE") == 0) return 53;
-    
-    // some more missing codes abound, reserved I presume, but it would
-    // have been helpful for Apple to have a document with them all listed
-    
     if (strcmp(keyString, ".") == 0) return 65;
-    
     if (strcmp(keyString, "*") == 0) return 67;
-    
     if (strcmp(keyString, "+") == 0) return 69;
-    
     if (strcmp(keyString, "CLEAR") == 0) return 71;
-    
     if (strcmp(keyString, "/") == 0) return 75;
-    if (strcmp(keyString, "ENTER") == 0) return 76;  // numberpad on full kbd
-    
+    if (strcmp(keyString, "ENTER") == 0) return 76;
     if (strcmp(keyString, "=") == 0) return 78;
-    
     if (strcmp(keyString, "=") == 0) return 81;
     if (strcmp(keyString, "0") == 0) return 82;
     if (strcmp(keyString, "1") == 0) return 83;
@@ -123,27 +117,19 @@ uint16_t keyCodeForKeyString(const char * keyString) {
     if (strcmp(keyString, "5") == 0) return 87;
     if (strcmp(keyString, "6") == 0) return 88;
     if (strcmp(keyString, "7") == 0) return 89;
-    
     if (strcmp(keyString, "8") == 0) return 91;
     if (strcmp(keyString, "9") == 0) return 92;
-    
     if (strcmp(keyString, "F5") == 0) return 96;
     if (strcmp(keyString, "F6") == 0) return 97;
     if (strcmp(keyString, "F7") == 0) return 98;
     if (strcmp(keyString, "F3") == 0) return 99;
     if (strcmp(keyString, "F8") == 0) return 100;
     if (strcmp(keyString, "F9") == 0) return 101;
-    
     if (strcmp(keyString, "F11") == 0) return 103;
-    
     if (strcmp(keyString, "F13") == 0) return 105;
-    
     if (strcmp(keyString, "F14") == 0) return 107;
-    
     if (strcmp(keyString, "F10") == 0) return 109;
-    
     if (strcmp(keyString, "F12") == 0) return 111;
-    
     if (strcmp(keyString, "F15") == 0) return 113;
     if (strcmp(keyString, "HELP") == 0) return 114;
     if (strcmp(keyString, "HOME") == 0) return 115;
@@ -165,12 +151,8 @@ uint16_t keyCodeForKeyString(const char * keyString) {
 
 CGEventRef keyBoardCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef event, void *refcon) {
     if ((type != kCGEventKeyDown) && (type != kCGEventKeyUp) && (type != kCGEventFlagsChanged)) return event;
-    
-    // The incoming keycode.
     CGKeyCode keycode = (CGKeyCode)CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode);
-    //    printf("%i", keycode);
-    
-    // Control
+
     if (keycode == (CGKeyCode)59 || keycode == (CGKeyCode)62) {
         if (ctr) {
             ctr = false;
@@ -178,12 +160,10 @@ CGEventRef keyBoardCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef 
             ctr = true;
         }
     }
-    
     if (ctr) {
         CGEventSetFlags(event, (CGEventFlags)(NX_CONTROLMASK | CGEventGetFlags(event)));
     }
-    
-    //Shift
+
     if (keycode == (CGKeyCode)60 || keycode == (CGKeyCode)56) {
         if (sft) {
             sft = false;
@@ -191,12 +171,10 @@ CGEventRef keyBoardCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef 
             sft = true;
         }
     }
-    
     if (sft) {
         CGEventSetFlags(event, (CGEventFlags)(NX_SHIFTMASK | CGEventGetFlags(event)));
     }
     
-    //Command
     if (keycode == (CGKeyCode)55 || keycode == (CGKeyCode)54) {
         if (cmd) {
             cmd = false;
@@ -204,12 +182,10 @@ CGEventRef keyBoardCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef 
             cmd = true;
         }
     }
-    
     if (cmd) {
         CGEventSetFlags(event, (CGEventFlags)(NX_COMMANDMASK | CGEventGetFlags(event)));
     }
-    
-    //Option
+
     if (keycode == (CGKeyCode)58 || keycode == (CGKeyCode)61) {
         if (alt) {
             alt = false;
@@ -217,7 +193,6 @@ CGEventRef keyBoardCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef 
             alt = true;
         }
     }
-    
     if (alt) {
         CGEventSetFlags(event, (CGEventFlags)(NX_ALTERNATEMASK | CGEventGetFlags(event)));
     }
@@ -229,8 +204,7 @@ CGEventRef keyBoardCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef 
             printf("State Changed! %s\n", states ? "ON" : "OFF");
         }
     }
-    
-    // We must return the event for it to be useful.
+
     return event;
 }
 
@@ -249,221 +223,111 @@ void keyBoardListen() {
     CFRunLoopRun();
 }
 
-int get_process() {
-    pid_t pids[1024];
-    int numberOfProcesses = proc_listpids(PROC_ALL_PIDS, 0, NULL, 0);
-    proc_listpids(PROC_ALL_PIDS, 0, pids, sizeof(pids));
-    
-    for (int i = 0; i < numberOfProcesses; ++i) {
-        if (pids[i] == 0) { continue; }
-        char name[1024];
-        proc_name(pids[i], name, sizeof(name));
-        if (!strncmp(name, "csgo_osx64", sizeof("csgo_osx64"))) {
-            return pids[i];
-        }
-    }
-    return -1;
-}
-
-int get_client_module_info(task_t task, pid_t pid, mach_vm_address_t * start, unsigned long * length) {
-    kern_return_t error = task_for_pid(current_task(), pid, &task);
-    printf("Process reallocation: %d -> %x [%d - %s]\n", pid, task, error, mach_error_string(error));
-    
-    struct task_dyld_info dyld_info;
-    mach_vm_address_t address;
-    mach_msg_type_number_t count = TASK_DYLD_INFO_COUNT;
-    if (task_info(task, TASK_DYLD_INFO, (task_info_t)&dyld_info, &count) == KERN_SUCCESS) {
-        address = dyld_info.all_image_info_addr;
-    } else {
-        printf("Failed to get get info.\n");
-        return 0;
-    }
-    
-    struct dyld_all_image_infos *dyldaii;
-    mach_msg_type_number_t size = sizeof(dyld_all_image_infos);
-    vm_offset_t readMem;
-    kern_return_t kr = vm_read(task, address, size, &readMem, &size);
-    if (kr != KERN_SUCCESS) {
-        printf("RIP");
-        return 0;
-    } else {
-        printf("CSGO Memory %lu \n", readMem);
-    }
-    
-    dyldaii = (dyld_all_image_infos *) readMem;
-    printf("Version: %d, %d images at offset %p\n", dyldaii->version, dyldaii->infoArrayCount, dyldaii->infoArray);
-    
-    int imageCount = dyldaii->infoArrayCount;
-    mach_msg_type_number_t dataCnt = imageCount * 24;
-    struct dyld_image_info *g_dii = NULL;
-    g_dii = (struct dyld_image_info *) malloc (dataCnt);
-    
-    // 32bit bs 64bit
-    kern_return_t kr2 = vm_read(task, (mach_vm_address_t)dyldaii->infoArray, dataCnt, &readMem, &dataCnt);
-    if (kr2) {
-        printf("get lists failed \n");
-        return 0;
-    } else {
-        
-    }
-    
-    struct dyld_image_info *dii = (struct dyld_image_info *) readMem;
-    for (int i = 0; i < imageCount; i++) {
-        dataCnt = 1024;
-        vm_read(task, (mach_vm_address_t)dii[i].imageFilePath, dataCnt, &readMem, &dataCnt);
-        char *imageName = (char *)readMem;
-        if (imageName){
-            g_dii[i].imageFilePath = strdup(imageName);
-        }
-        else{
-            g_dii[i].imageFilePath = NULL;
-        }
-        g_dii[i].imageLoadAddress = dii[i].imageLoadAddress;
-        if (strstr(imageName, "/client.dylib") != NULL ){
-            *start = (mach_vm_address_t)dii[i].imageLoadAddress;
-            //            printf("!!!!!!!!find %s\n, address is 0x%llx \n", imageName, (mach_vm_address_t)dii[i].imageLoadAddress);
-        }
-        if (strstr(imageName, "/engine.dylib") != NULL ){
-            *start = (mach_vm_address_t)dii[i].imageLoadAddress;
-            //            printf("!!!!!!!!find %s\n, address is 0x%llx \n", imageName, (mach_vm_address_t)dii[i].imageLoadAddress);
-        }
-    }
-    return task;
-}
-
-template <typename Type>
-int readRam(task_t task, uint64_t address, Type * result) {
-    int * size = (int* )malloc(sizeof(int));
-    *size = 4;
-    uint32_t * sz = (uint32_t *)malloc(sizeof(uint32_t));
-    vm_offset_t * data = (vm_offset_t *)malloc(sizeof(uint64_t));
-    
-    //vm_offset_t data;
-    if (vm_read(task, address, *size, data, sz) != KERN_SUCCESS){
-        free(sz);
-        free(data);
-        free(size);
-        return 0;
-    }
-    
-    *result = (Type) *(Type* )(*data);
-    free(sz);
-    free(size);
-    free(data);
-    return 1;
-}
-
-int getEntityGlowLoopStartAddressAndCount(task_t task, mach_vm_address_t imgbase, uint64_t * address, int * count) {
+void getEntityGlowLoopStartAddressAndCount(task_t task, mach_vm_address_t imgbase, uint64_t * address, int * count) {
     int glowObjectLoopCount = 0x18;
-    auto reAddress = Utils::ReadMemAndDeAllocate<uint64_t>(task, current_task() ,imgbase + glowInfoOffset, address);
-    auto reCount = readRam<int>(task, imgbase + glowInfoOffset + glowObjectLoopCount, count);
-    if (!reAddress || !reCount) {
-        return 0;
-    } else {
-        return 1;
-    }
-}
-
-template <typename Type>
-void WriteMem(task_t task, mach_vm_address_t address, Type value) {
-    vm_write(task, address, (vm_offset_t) &value, sizeof(Type));
+    uint64_t glowAddress = mem->read<uint64_t>(imgbase + glowInfoOffset);
+    *address = glowAddress;
+    int glowCount   = mem->read<int>(imgbase + glowInfoOffset + glowObjectLoopCount);
+    *count = glowCount;
 }
 
 void applyGlowEffect(task_t task, mach_vm_address_t glowStartAddress, int glowObjectIndex, Color color) {
     uint64_t glowBaseAddress = glowStartAddress + (0x40 * glowObjectIndex);
     
-    WriteMem<bool>(task, glowBaseAddress + 0x28, statBool);
-    WriteMem<Color>(task, glowBaseAddress + 0x8, color);
+    mem->write<bool>(glowBaseAddress + 0x28, statBool);
+    mem->write<Color>(glowBaseAddress + 0x8, color);
 }
 
-void readPlayerPointAndHealth(task_t task, task_t taskSelf, mach_vm_address_t imgbase, mach_vm_address_t startAddress, int iTeamNum) {
-    uint64_t memoryAddress;
-    int glowIndex;
-    //    printf("----------updated----------\n");
+void readPlayerPointAndHealth(mach_vm_address_t imgbase, mach_vm_address_t startAddress, int iTeamNum) {
     for (int i = 0; i < 60; i++) {
-        int playerTeamNum;
-        if (Utils::ReadMemAndDeAllocate<uint64_t>(task, taskSelf, imgbase + playerBase + 0x20 * i, &memoryAddress) == -1) {
-            continue;
-        }
+        uint64_t memoryAddress  = mem->read<uint64_t>(imgbase + playerBase + 0x20 * i);
+
         if (memoryAddress <= 0x0){
             continue;
         }
-        if (Utils::ReadMemAndDeAllocate<int>(task, taskSelf, memoryAddress + m_iGlowIndex, &glowIndex)) {
-            continue;
-        }
-        int health;
-        if (Utils::ReadMemAndDeAllocate<int>(task, taskSelf, memoryAddress + 0x134, &health)) {
-            continue;
-        }
-        if (Utils::ReadMemAndDeAllocate<int>(task, taskSelf, memoryAddress + 0x128, &playerTeamNum)) {
-            continue;
-        }
+        int glowIndex           = mem->read<int>(memoryAddress + m_iGlowIndex);
+        int health              = mem->read<int>(memoryAddress + 0x134);
+        int playerTeamNum       = mem->read<int>(memoryAddress + 0x128);
+
         if (playerTeamNum == iTeamNum || playerTeamNum == 0) {
             continue;
         }
+        
         if (playerTeamNum == 0) {
             continue;
         }
-        //        bool dormant;
-        //        if (Utils::ReadMemAndDeAllocate(task, taskSelf, memoryAddress + 0xee, &dormant)) {
-        //            if (dormant == 0) {
-        //                continue;
-        //            }
-        //        }
-        //printf("The memory address read is 0x%x player %i health is %i iteam is %i playerteam is %i \n", memoryAddress, glowIndex, health, iTeamNum, playerTeamNum);
-        if (health == 0){
+
+        if (health == 0) {
             health = 100;
         }
         
         Color color = {float((100 - health) / 100.0), float((health) / 100.0), 0.0f, 0.8f};
-        applyGlowEffect(task, startAddress, glowIndex, color);
+        applyGlowEffect(mainTask, startAddress, glowIndex, color);
     }
 }
 
-int testLocalPlayerAddress(task_t csgo, uint64_t clientBase) {
-    uint64_t playerAddress;
-    int health, iTeamNum;
-    Utils::ReadMemAndDeAllocate(csgo, current_task(), clientBase + LocalPlayerBase, &playerAddress);
-    Utils::ReadMemAndDeAllocate(csgo, current_task(), playerAddress + 0x134, &health);
-    Utils::ReadMemAndDeAllocate(csgo, current_task(), playerAddress + 0x128, &iTeamNum);
-    //printf("I team is %i and team %i\n", iTeamNum, health);
+int testLocalPlayerAddress(uint64_t clientBase) {
+    uint64_t playerAddress  = mem->read<uint64_t>(clientBase + LocalPlayerBase);
+    // Developer Comment:
+    // int health              = mem->read<int>(playerAddress + 0x134);
+    // We don't read this because it was never been used
+    int iTeamNum            = mem->read<int>(playerAddress + 0x128);
+
     return iTeamNum;
 }
 
 int main(int argc, const char * argv[]) {
-    // keyboard listen
     dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), ^{
         keyBoardListen();
     });
-    
-    unsigned long moduleLength = 0x0511e000;
-    
-    mach_vm_address_t moduleStartAddress;
-    pid_t pid = get_process();
-    if (pid == -1) {
+
+    if (mainPid == -1) {
         printf("Cant find the PID of CSGO\n");
         exit(0);
     } else {
-        printf("Found CSGO PID: %i\n", pid);
+        printf("Found CSGO PID: %i\n", mainPid);
     }
     
-    task_t task;
-    task = get_client_module_info(task, pid, &moduleStartAddress, &moduleLength);
-    if (task) {
+    off_t moduleLength = 0;
+    mach_vm_address_t moduleStartAddress;
+    g_cProc->getModule(mainTask, &moduleStartAddress, &moduleLength, "/client.dylib");
+    
+    Scanner * clientScanner = new Scanner(moduleStartAddress, moduleLength);
+    
+    LocalPlayerBase = clientScanner->getPointer(
+        (Byte*)"\x89\xD6\x41\x89\x00\x49\x89\x00\x48\x8B\x1D\x00\x00\x00\x00\x48\x85\xDB\x74\x00",
+        "xxxx?xx?xxx????xxxx?",
+        0xB
+    ) + 0x4;
+    
+    playerBase = clientScanner->getPointer(
+        (Byte*)"\x48\x8D\x1D\x00\x00\x00\x00\x48\x89\x00\xE8\x28\xD6\x00\x00",
+        "xxx????xx?xxx??",
+        0x3
+    ) + 0x2C;
+
+    glowInfoOffset = clientScanner->getPointer(
+        (Byte*)"\x48\x8D\x3D\x00\x00\x00\x05\xE8\x00\x00\x00\x00\x85\xC0\x0F\x84\x00\x00\x00\x00\x48\xC7\x00\x00\x00\x00\x00\x00\x00\x00\x00\x48\x8D\x00\x00\x00\x00\x00",
+        "xxx???xx????xxxx????xx?????????xx?????",
+        0x22
+    ) + 0x4;
+
+    if (mainTask) {
         printf("Found the Client.dylib address: 0x%llx \n", moduleStartAddress);
         printf("Module should end at 0x%llx\n", moduleStartAddress + moduleLength);
     } else {
         printf("Failed to get the Client.dylib address\n");
     }
     
-    // info check end
     uint64_t glowObjectLoopStartAddress;
     int glowObjectLoopCount = 0;
-    getEntityGlowLoopStartAddressAndCount(task, moduleStartAddress, &glowObjectLoopStartAddress, &glowObjectLoopCount);
-    while (true) {
-        if (states) {
-            int i_teamNum = testLocalPlayerAddress(task, moduleStartAddress);
-            readPlayerPointAndHealth(task, current_task(), moduleStartAddress, glowObjectLoopStartAddress, i_teamNum);
+    getEntityGlowLoopStartAddressAndCount(mainTask, moduleStartAddress, &glowObjectLoopStartAddress, &glowObjectLoopCount);
+    while (true)
+    {
+        if (states)
+        {
+            int i_teamNum = testLocalPlayerAddress(moduleStartAddress);
+            readPlayerPointAndHealth(moduleStartAddress, glowObjectLoopStartAddress, i_teamNum);
         }
         usleep(7800);
     }
