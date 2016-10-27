@@ -21,8 +21,8 @@
 #include <ApplicationServices/ApplicationServices.h>
 #include "memory/process.cpp"
 
-pid_t   mainPid     = g_cProc->get("csgo_osx64");
-task_t  mainTask    = g_cProc->task(mainPid);
+pid_t   mainPid     = -1;
+task_t  mainTask    = 0;
 
 #include "memory/manager.cpp"
 #include "memory/scanner.cpp"
@@ -280,6 +280,9 @@ int main(int argc, const char * argv[]) {
     dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), ^{
         keyBoardListen();
     });
+    
+    mainPid     = g_cProc->get("csgo_osx64");
+    mainTask    = g_cProc->task(mainPid);
 
     if (mainPid == -1) {
         printf("Cant find the PID of CSGO\n");
