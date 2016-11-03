@@ -19,7 +19,7 @@ Maybe, depends on Gaben
 ### More features?
 No! We won't implement aimbot, bunnyhop or other stuff to it. This is just a native CS:GO Wallhack.
 
-But you can refer to http://csgoglow.freeforums.org/ signup and ask questions about other features. The issue Tracker should be an Issue tracker.
+But you can refer to https://csgoglow.hipchat.com/invite/646884/2885f39b8a11953a3039070fe8325713 signup and ask questions about other features. The issue Tracker should be an Issue tracker.
 
 ## About `Internal`:
 sorry for another delay, there some new trouble.
