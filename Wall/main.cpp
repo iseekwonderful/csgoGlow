@@ -271,8 +271,13 @@ int testLocalPlayerAddress(uint64_t clientBase) {
     // Developer Comment:
     // int health              = mem->read<int>(playerAddress + 0x134);
     // We don't read this because it was never been used
+    int flashed             = mem->read<int>(playerAddress + 0xABF8);
     int iTeamNum            = mem->read<int>(playerAddress + 0x128);
 
+    if(flashed) {
+        mem->write<float>(playerAddress + 0xABF8, 0);
+    }
+    
     return iTeamNum;
 }
 
