@@ -32,6 +32,7 @@
 		D86084DF1DC26495004A7257 /* process.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = process.cpp; sourceTree = "<group>"; };
 		D86084E01DC26495004A7257 /* process.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = process.hpp; sourceTree = "<group>"; };
 		D86084E11DC26495004A7257 /* scanner.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = scanner.cpp; sourceTree = "<group>"; };
+		D860A9F01DD2FBD5000D74C8 /* keyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = keyboard.h; path = utils/keyboard.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +67,7 @@
 		106534F91CE77CA90013D2AE /* Wall */ = {
 			isa = PBXGroup;
 			children = (
+				D860A9F11DD2FBDC000D74C8 /* utils */,
 				D86084DC1DC26495004A7257 /* memory */,
 				106534FA1CE77CA90013D2AE /* main.cpp */,
 			);
@@ -82,6 +84,14 @@
 				D86084E11DC26495004A7257 /* scanner.cpp */,
 			);
 			path = memory;
+			sourceTree = "<group>";
+		};
+		D860A9F11DD2FBDC000D74C8 /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				D860A9F01DD2FBD5000D74C8 /* keyboard.h */,
+			);
+			name = utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
