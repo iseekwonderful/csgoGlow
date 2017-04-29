@@ -36,8 +36,8 @@ bool states = true;
 #include "utils/keyboard.h"
 
 uint64_t glowInfoOffset;
-uint64_t LocalPlayerBase;
-uint64_t playerBase;
+uint64_t LocalPlayerBase = 10f1948;
+uint64_t playerBase = 10fda98;
 
 uint64_t m_iGlowIndex       = 0xAC10;
 bool statBool = true;
