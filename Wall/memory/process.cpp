@@ -39,7 +39,7 @@ public:
     void getModule(task_t task, mach_vm_address_t * start, off_t * length, const char * module, Byte * buffer = nullptr, bool readBuffer = false)
     {
         struct task_dyld_info dyld_info;
-        mach_vm_address_t address;
+        mach_vm_address_t address = 0;
         mach_msg_type_number_t count = TASK_DYLD_INFO_COUNT;
         if (task_info(task, TASK_DYLD_INFO, (task_info_t)&dyld_info, &count) == KERN_SUCCESS)
         {

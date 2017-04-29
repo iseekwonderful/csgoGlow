@@ -78,6 +78,7 @@ void applyEntityGlow(mach_vm_address_t imgbase, mach_vm_address_t startAddress, 
         
         // We don't need to call an extra function to just write to memory (Keep the code clean)
         uint64_t glowBase = startAddress + (0x40 * glowIndex);
+        printf("base: 0x%llx\n", glowBase);
         
         mem->write<bool>(glowBase + 0x28, statBool);
         mem->write<Color>(glowBase + 0x8, color);
@@ -121,14 +122,14 @@ int main(int argc, const char * argv[])
     ) + 0x4;
     
     playerBase = clientScanner->getPointer(
-        (Byte*)"\x48\x8D\x1D\x00\x00\x00\x00\x48\x89\x00\xE8\x28\xD6\x00\x00",
-        "xxx????xx?xxx??",
+        (Byte*)"\x48\x8D\x1D\x00\x00\x00\x00\x48\x89\xDF\xE8\x00\x00\x00\x00\x48\x8D\x3D\x00\x00\x00\x00\x48\x8D\x15\x00\x00\x00\x00\x48\x89\xDE",
+        "xxx????xxxx????xxx????xxx????xxx",
         0x3
     ) + 0x2C;
     
     glowInfoOffset = clientScanner->getPointer(
-        (Byte*)"\x48\x8D\x3D\x00\x00\x00\x05\xE8\x00\x00\x00\x00\x85\xC0\x0F\x84\x00\x00\x00\x00\x48\xC7\x00\x00\x00\x00\x00\x00\x00\x00\x00\x48\x8D\x00\x00\x00\x00\x00",
-        "xxx???xx????xxxx????xx?????????xx?????",
+        (Byte*)"\x48\x8D\x3D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x85\xC0\x0F\x84\x00\x00\x00\x00\x48\xC7\x05\x00\x00\x00\x00\x00\x00\x00\x00\x48\x8D\x35\x00\x00\x00\x00",
+        "xxx????x????xxxx????xxx????xxxxxxx????",
         0x22
     ) + 0x4;
     
