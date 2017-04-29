@@ -78,7 +78,6 @@ void applyEntityGlow(mach_vm_address_t imgbase, mach_vm_address_t startAddress, 
         
         // We don't need to call an extra function to just write to memory (Keep the code clean)
         uint64_t glowBase = startAddress + (0x40 * glowIndex);
-        printf("base: 0x%llx\n", glowBase);
         
         mem->write<bool>(glowBase + 0x28, statBool);
         mem->write<Color>(glowBase + 0x8, color);
