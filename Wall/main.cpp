@@ -39,7 +39,7 @@ uint64_t glowInfoOffset;
 uint64_t LocalPlayerBase;
 uint64_t playerBase;
 
-uint64_t m_iGlowIndex       = 0xAC10;
+uint64_t m_iGlowIndex       = 0xABF0;
 bool statBool = true;
 
 struct Color {
