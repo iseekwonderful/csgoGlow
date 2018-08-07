@@ -102,7 +102,7 @@ int main(int argc, const char * argv[])
     
     off_t moduleLength = 0;
     mach_vm_address_t moduleStartAddress;
-    g_cProc->getModule(mainTask, &moduleStartAddress, &moduleLength, "/client.dylib");
+    g_cProc->getModule(mainTask, &moduleStartAddress, &moduleLength, "/client_panorama.dylib");
 
     if (mainTask) {
         printf("Found the Client.dylib address: 0x%llx \n", moduleStartAddress);
