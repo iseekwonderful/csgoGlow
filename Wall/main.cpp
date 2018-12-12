@@ -59,7 +59,7 @@ void applyEntityGlow(mach_vm_address_t imgbase, mach_vm_address_t startAddress, 
         }
         
         int glowIndex           = mem->read<int>(memoryAddress + m_iGlowIndex);
-        int health              = mem->read<int>(memoryAddress + 0x134);
+        int health              = mem->read<int>(memoryAddress + 0x138);
         int playerTeamNum       = mem->read<int>(memoryAddress + 0x12C);
 
         if (playerTeamNum == iTeamNum || playerTeamNum == 0) {
