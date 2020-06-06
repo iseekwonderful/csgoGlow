@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		106534FB1CE77CA90013D2AE /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 106534FA1CE77CA90013D2AE /* main.cpp */; };
 		106535051CE861C60013D2AE /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 106535041CE861C60013D2AE /* ApplicationServices.framework */; };
+		EA7F508223867EDD00DE777B /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA7F508023867EDD00DE777B /* main.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,14 +25,12 @@
 
 /* Begin PBXFileReference section */
 		106534F71CE77CA90013D2AE /* Wall */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Wall; sourceTree = BUILT_PRODUCTS_DIR; };
-		106534FA1CE77CA90013D2AE /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; wrapsLines = 0; };
 		106535041CE861C60013D2AE /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
-		D86084DD1DC26495004A7257 /* manager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = manager.cpp; sourceTree = "<group>"; };
-		D86084DE1DC26495004A7257 /* manager.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = manager.hpp; sourceTree = "<group>"; };
-		D86084DF1DC26495004A7257 /* process.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = process.cpp; sourceTree = "<group>"; };
-		D86084E01DC26495004A7257 /* process.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = process.hpp; sourceTree = "<group>"; };
-		D86084E11DC26495004A7257 /* scanner.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = scanner.cpp; sourceTree = "<group>"; };
-		D860A9F01DD2FBD5000D74C8 /* keyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = keyboard.h; path = utils/keyboard.h; sourceTree = "<group>"; };
+		EA7F508023867EDD00DE777B /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		EA7F508123867EDD00DE777B /* Offsets.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Offsets.hpp; sourceTree = "<group>"; };
+		EA87B8672380933800C4597F /* MemMngr.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MemMngr.hpp; sourceTree = "<group>"; };
+		EA87B8682380933800C4597F /* Process.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Process.hpp; sourceTree = "<group>"; };
+		EA87B8692380933800C4597F /* Scanner.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Scanner.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,31 +65,13 @@
 		106534F91CE77CA90013D2AE /* Wall */ = {
 			isa = PBXGroup;
 			children = (
-				D860A9F11DD2FBDC000D74C8 /* utils */,
-				D86084DC1DC26495004A7257 /* memory */,
-				106534FA1CE77CA90013D2AE /* main.cpp */,
+				EA7F508123867EDD00DE777B /* Offsets.hpp */,
+				EA87B8682380933800C4597F /* Process.hpp */,
+				EA87B8672380933800C4597F /* MemMngr.hpp */,
+				EA87B8692380933800C4597F /* Scanner.hpp */,
+				EA7F508023867EDD00DE777B /* main.cpp */,
 			);
 			path = Wall;
-			sourceTree = "<group>";
-		};
-		D86084DC1DC26495004A7257 /* memory */ = {
-			isa = PBXGroup;
-			children = (
-				D86084DD1DC26495004A7257 /* manager.cpp */,
-				D86084DE1DC26495004A7257 /* manager.hpp */,
-				D86084DF1DC26495004A7257 /* process.cpp */,
-				D86084E01DC26495004A7257 /* process.hpp */,
-				D86084E11DC26495004A7257 /* scanner.cpp */,
-			);
-			path = memory;
-			sourceTree = "<group>";
-		};
-		D860A9F11DD2FBDC000D74C8 /* utils */ = {
-			isa = PBXGroup;
-			children = (
-				D860A9F01DD2FBD5000D74C8 /* keyboard.h */,
-			);
-			name = utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -133,6 +113,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 106534EE1CE77CA90013D2AE;
@@ -150,7 +131,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				106534FB1CE77CA90013D2AE /* main.cpp in Sources */,
+				EA7F508223867EDD00DE777B /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -238,6 +219,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -252,6 +234,7 @@
 		106535001CE77CA90013D2AE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_OPTIMIZATION_LEVEL = 3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
