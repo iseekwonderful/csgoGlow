@@ -1,3 +1,11 @@
+//
+//  MemMngr.hpp
+//
+//  Created by Andre Kalisch on 27.09.16.
+//  Copyright © 2016 Andre Kalisch. All rights reserved.
+//
+// Edited by Fricker95 on 1/1/20.
+
 #ifndef MemMngr_hpp
 #define MemMngr_hpp
 
