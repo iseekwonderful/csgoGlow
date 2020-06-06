@@ -4,7 +4,7 @@
 //  Created by Andre Kalisch on 23.09.16.
 //  Copyright © 2016 Andre Kalisch. All rights reserved.
 //
-// Edited by Fricker95 on 1/1/20.
+//  Edited by Fricker95 on 1/1/20.
 
 #ifndef Scanner_hpp
 #define Scanner_hpp

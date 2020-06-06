@@ -4,7 +4,7 @@
 //  Created by Andre Kalisch on 30.08.16.
 //  Copyright © 2016 aKalisch. All rights reserved.
 //
-// Edited by Fricker95 on 1/1/20.
+//  Edited by Fricker95 on 1/1/20.
 
 #ifndef Process_hpp
 #define Process_hpp

@@ -8,7 +8,7 @@
 //  Created by sheep on 16/5/14.
 //  Copyright © 2016年 nadp. All rights reserved.
 //
-// Edited by: Fricker95 on 1/1/20.
+//  Edited by Fricker95 on 1/1/20.
 
 #include "Scanner.hpp"
 #include "Offsets.hpp"
