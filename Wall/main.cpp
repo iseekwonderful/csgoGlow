@@ -37,6 +37,7 @@ void applyEntityGlow(mach_vm_address_t startAddress, int iTeamNum){
 			continue;
 		
         if (!mem->read<bool>(memoryAddress + m_bDormant) && !mem->read<bool>(memoryAddress + m_bLifeState)) {
+			
 			health = mem->read<int>(memoryAddress + m_iHealth);
 			
 			if (health == 0)
