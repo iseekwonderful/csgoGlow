@@ -79,7 +79,7 @@ void getGlowIndexOffset(mach_vm_address_t startAddress){
 	if (!isValid) {
 		printf("Could not find new Valie m_iGLowIndex Offset\n");
 		printf("Retry using the last known Offset");
-		exit(-1);
+		exit(0);
 	}
 }
 
