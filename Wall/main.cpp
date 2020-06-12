@@ -44,7 +44,9 @@ void getGlowIndexOffset(mach_vm_address_t startAddress){
 	 
 	 - launch csgo with flag: -insecure
 	 - launch game with bots.
-	 - uncomment line 240
+	 - in terminal:
+	  - sudo -s
+	  - ./Wall -o
 	 */
 	
 	uint64_t memoryAddress;
