@@ -10,6 +10,14 @@
 //
 //  Edited by Fricker95 on 1/1/20.
 
+/*
+
+ launch with sudo -s
+ 
+ stop by typing "stop", "exit" or terminating csgo
+ 
+*/
+
 #include "Scanner.hpp"
 #include "Offsets.hpp"
 
@@ -28,11 +36,13 @@ struct Color{
 
 void getGlowIndexOffset(mach_vm_address_t startAddress){
 	/*
-	attempts to get the new glow index offset.
+	 ** SHOULD NOT BE RUN ON VAC SERVERS **
 	 
-	- launch csgo with flag: -insecure
-	- launch game with bots.
-	- uncomment line 224
+	 attempts to get the new glow index offset.
+	 
+	 - launch csgo with flag: -insecure
+	 - launch game with bots.
+	 - uncomment line 240
 	*/
 	
 	uint64_t memoryAddress;
@@ -87,6 +97,7 @@ void applyEntityGlow(mach_vm_address_t startAddress, int iTeamNum){
 				health = 100;
 			
 			if (mem->read<int>(memoryAddress + m_iTeam) != iTeamNum) {
+				// Enemy glow colors
                 color = {
 					float((100 - health)/100.0),
 					float((health)/100.0),
@@ -94,6 +105,7 @@ void applyEntityGlow(mach_vm_address_t startAddress, int iTeamNum){
 					0.6f
 				};
 			} else {
+				// Teammates glow colors
 				color = {
 					float((100 - health)/100.0),
 					0.0f,
@@ -103,11 +115,15 @@ void applyEntityGlow(mach_vm_address_t startAddress, int iTeamNum){
 			}
 			
 			glowBase = startAddress + (m_dwGlowStructSize * mem->read<int>(memoryAddress + m_iGlowIndex));
+			
+			
+			// Enables Glow
             if (glowBase != 0x0) {
                 mem->write<bool>(glowBase + m_dwGlowEnable, true);
                 mem->write<Color>(glowBase + m_dwGlowColorStruct, color);
             }
 			
+			// Anti flash
 			if (m_dwLocalPlayerAddress == memoryAddress) {
 				if (mem->read<double>(memoryAddress + m_dFlashAlpha) > 100) {
 					mem->write(memoryAddress + m_dFlashAlpha, 100.0f);
