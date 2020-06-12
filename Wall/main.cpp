@@ -182,8 +182,10 @@ int main(int argc, const char* argv[]) {
 	
 	bool getOffset = false;
 	
-	if (std::string(argv[1]) == "-o")
-		getOffset = true;
+	if (argc > 1) {
+		if (std::string(argv[1]) == "-o")
+			getOffset = true;
+	}
 	
 	Process* g_cProc = new Process();
 	
