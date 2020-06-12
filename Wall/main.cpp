@@ -92,6 +92,7 @@ void applyEntityGlow(mach_vm_address_t startAddress, int iTeamNum){
 	uint64_t memoryAddress;
 	int health;
 	uint64_t glowBase;
+	double maxFlash = 100.0f;
 	
 	for (int i = 0; i < 60; i++){
 		memoryAddress = mem->read<uint64_t>(m_dwEntityList + (m_dwEntityStructSize * i));
@@ -126,7 +127,6 @@ void applyEntityGlow(mach_vm_address_t startAddress, int iTeamNum){
 			
 			glowBase = startAddress + (m_dwGlowStructSize * mem->read<int>(memoryAddress + m_iGlowIndex));
 			
-			
 			// Enables Glow
 			if (glowBase != 0x0) {
 				mem->write<bool>(glowBase + m_dwGlowEnable, true);
@@ -135,8 +135,8 @@ void applyEntityGlow(mach_vm_address_t startAddress, int iTeamNum){
 			
 			// Anti flash
 			if (m_dwLocalPlayerAddress == memoryAddress) {
-				if (mem->read<double>(memoryAddress + m_dFlashAlpha) > 100) {
-					mem->write(memoryAddress + m_dFlashAlpha, 100.0f);
+				if (mem->read<double>(memoryAddress + m_dFlashAlpha) > maxFlash) {
+					mem->write(memoryAddress + m_dFlashAlpha, maxFlash);
 				}
 				else {
 					mem->write(memoryAddress + m_dFlashAlpha, 0.0f);
