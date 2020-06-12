@@ -75,6 +75,12 @@ void getGlowIndexOffset(mach_vm_address_t startAddress){
 		}
 		usleep(1000);
 	}
+	
+	if (!isValid) {
+		printf("Could not find new Valie m_iGLowIndex Offset\n");
+		printf("Retry using the last known Offset");
+		exit(-1);
+	}
 }
 
 void applyEntityGlow(mach_vm_address_t startAddress, int iTeamNum){
