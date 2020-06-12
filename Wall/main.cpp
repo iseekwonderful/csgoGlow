@@ -13,6 +13,8 @@
 #include "Scanner.hpp"
 #include "Offsets.hpp"
 
+#include <iostream>
+#include <vector>
 #include <thread>
 
 bool STOP = false;
@@ -23,6 +25,47 @@ struct Color{
 	float blue;
 	float alpha;
 };
+
+void getGlowIndexOffset(mach_vm_address_t startAddress){
+	/*
+	attempts to get the new glow index offset.
+	 
+	- launch csgo with flag: -insecure
+	- launch game with bots.
+	- uncomment line 224
+	*/
+	
+	uint64_t memoryAddress;
+
+	bool isValid = false;
+	std::vector<int> glowIndexes;
+	
+	for (int j = 0; j < m_dwGlowStructSize; j++) {
+		for (int i = 0; i < 60; i++){
+			memoryAddress = mem->read<uint64_t>(m_dwEntityList + (m_dwEntityStructSize * i));
+			
+			if (memoryAddress <= 0x0 || memoryAddress == 0)
+				continue;
+			
+			if (!mem->read<bool>(memoryAddress + m_bDormant) && !mem->read<bool>(memoryAddress + m_bLifeState))
+				glowIndexes.emplace_back(mem->read<int>(memoryAddress + m_iGlowIndex + j));
+		}
+		
+		for (int i = 1; i < glowIndexes.size(); ++i) {
+			if (glowIndexes[i] > 1 && glowIndexes[i] < 60)
+				isValid = true;
+			else
+				isValid = false;
+		}
+		glowIndexes.clear();
+		
+		if (isValid) {
+			printf("New m_iGlowIndex Offset = 0x%llx\n", m_iGlowIndex + j);
+			exit(0);
+		}
+		usleep(1000);
+	}
+}
 
 void applyEntityGlow(mach_vm_address_t startAddress, int iTeamNum){
 	Color color;
@@ -164,9 +207,8 @@ int main(int argc, const char* argv[]) {
    
     uint64_t dwGlowObjectLoopStartAddress = mem->read<uint64_t>(m_dwGlowManager);
     
-    if (dwGlowObjectLoopStartAddress != 0x0) {
+	if (dwGlowObjectLoopStartAddress != 0x0)
         printf("Glow Object Start: 0x%llx\n", dwGlowObjectLoopStartAddress);
-    }
     
     int i_teamNum = 0;
     
@@ -179,13 +221,13 @@ int main(int argc, const char* argv[]) {
             i_teamNum = mem->read<int>(m_dwLocalPlayerAddress + m_iTeam);
             dwGlowObjectLoopStartAddress = mem->read<uint64_t>(m_dwGlowManager);
             if (dwGlowObjectLoopStartAddress != 0x0) {
-                applyEntityGlow(dwGlowObjectLoopStartAddress, i_teamNum);
+				//getGlowIndexOffset(dwGlowObjectLoopStartAddress);
+				applyEntityGlow(dwGlowObjectLoopStartAddress, i_teamNum);
             } else {
                 getPointers(client_moduleStartAddress, client_moduleLength);
                 dwGlowObjectLoopStartAddress = mem->read<uint64_t>(m_dwGlowManager);
-                if (dwGlowObjectLoopStartAddress != 0x0) {
+				if (dwGlowObjectLoopStartAddress != 0x0)
                     printf("Glow Object Start: 0x%llx\n", dwGlowObjectLoopStartAddress);
-                }
             }
         }
        
