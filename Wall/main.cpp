@@ -36,7 +36,7 @@ struct Color{
 	float alpha;
 };
 
-void getGlowIndexOffset(mach_vm_address_t startAddress){
+void getOffsets(mach_vm_address_t startAddress){
 	/*
 	 ** SHOULD NOT BE RUN ON VAC SERVERS **
 	 
@@ -75,14 +75,16 @@ void getGlowIndexOffset(mach_vm_address_t startAddress){
 		
 		if (isValid) {
 			printf("New m_iGlowIndex Offset = 0x%llx\n", m_iGlowIndex + j);
+			printf("New m_dFlashAlpha Offset = 0x%llx\n", m_dFlashAlpha + j);
+			printf("New m_fFlashDuration Offset = 0x%llx\n", m_fFlashDuration + j);
 			return;
 		}
 		usleep(1000);
 	}
 	
 	if (!isValid) {
-		printf("Could not find new m_iGLowIndex Offset\n");
-		printf("Retry using the last known Offset");
+		printf("Could not find new Offsets\n");
+		printf("Retry using the last known Offsets");
 		return;
 	}
 }
@@ -255,7 +257,7 @@ int main(int argc, const char* argv[]) {
 			dwGlowObjectLoopStartAddress = mem->read<uint64_t>(m_dwGlowManager);
 			if (dwGlowObjectLoopStartAddress != 0x0) {
 				if (getOffset) {
-					getGlowIndexOffset(dwGlowObjectLoopStartAddress);
+					getOffsets(dwGlowObjectLoopStartAddress);
 					STOP = true;
 				} else {
 					applyEntityGlow(dwGlowObjectLoopStartAddress, i_teamNum);
