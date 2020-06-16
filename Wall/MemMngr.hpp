@@ -6,12 +6,11 @@
 //
 //  Edited by Fricker95 on 1/1/20.
 
+#pragma once
 #ifndef MemMngr_hpp
 #define MemMngr_hpp
 
 #include "Process.hpp"
-
-#pragma once
 pid_t mainPid = -1;
 task_t mainTask = 0;
 
@@ -20,8 +19,9 @@ struct Temp_t{
 };
 
 class MemMngr {
+	
 public:
-    explicit MemMngr() {}
+	explicit MemMngr() {}
     
     ~MemMngr() {}
     

@@ -26,6 +26,8 @@
 /* Begin PBXFileReference section */
 		106534F71CE77CA90013D2AE /* Wall */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Wall; sourceTree = BUILT_PRODUCTS_DIR; };
 		106535041CE861C60013D2AE /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
+		6011E95F24982B3200F4BEDA /* Wall.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Wall.hpp; sourceTree = "<group>"; };
+		60496661249941CC004DE196 /* ColorText.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ColorText.hpp; sourceTree = "<group>"; };
 		EA7F508023867EDD00DE777B /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		EA7F508123867EDD00DE777B /* Offsets.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Offsets.hpp; sourceTree = "<group>"; };
 		EA87B8672380933800C4597F /* MemMngr.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MemMngr.hpp; sourceTree = "<group>"; };
@@ -66,9 +68,11 @@
 			isa = PBXGroup;
 			children = (
 				EA7F508123867EDD00DE777B /* Offsets.hpp */,
+				60496661249941CC004DE196 /* ColorText.hpp */,
 				EA87B8682380933800C4597F /* Process.hpp */,
 				EA87B8672380933800C4597F /* MemMngr.hpp */,
 				EA87B8692380933800C4597F /* Scanner.hpp */,
+				6011E95F24982B3200F4BEDA /* Wall.hpp */,
 				EA7F508023867EDD00DE777B /* main.cpp */,
 			);
 			path = Wall;
@@ -245,6 +249,7 @@
 		106534FF1CE77CA90013D2AE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CODE_SIGN_IDENTITY = "-";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -253,6 +258,7 @@
 		106535001CE77CA90013D2AE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CODE_SIGN_IDENTITY = "-";
 				GCC_OPTIMIZATION_LEVEL = 3;
 				PRODUCT_NAME = "$(TARGET_NAME)";

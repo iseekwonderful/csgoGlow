@@ -6,16 +6,13 @@
 //
 //  Edited by Fricker95 on 1/1/20.
 
+#pragma once
 #ifndef Scanner_hpp
 #define Scanner_hpp
 
 #include "MemMngr.hpp"
 
-#pragma once
-
 #include <sstream>
-
-MemMngr* mem = new MemMngr();
 
 class Scanner {
 public:
@@ -23,9 +20,11 @@ public:
     const char * module = nullptr;
     size_t bufferSize;
     uint64_t moduleStart;
+	MemMngr* mem = nullptr;
     
-    explicit Scanner(uint64_t dwStart, size_t dwSize){
+    explicit Scanner(uint64_t dwStart, size_t dwSize, MemMngr* mem = nullptr){
 		this->readBuffer(dwStart, dwSize);
+		this->mem = mem;
 	}
     
     ~Scanner() {

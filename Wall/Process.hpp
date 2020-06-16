@@ -6,10 +6,9 @@
 //
 //  Edited by Fricker95 on 1/1/20.
 
+#pragma once
 #ifndef Process_hpp
 #define Process_hpp
-
-#pragma once
 
 #include <iostream>
 #include <stdio.h>
