@@ -67,7 +67,7 @@ public:
 			g_cProc->getModule(mainTask, &engine_moduleStartAddress, &engine_moduleLength, "/engine.dylib");
 			
 			if (engine_moduleStartAddress != 0x0) {
-				printf("Found the engine.dylib address\t= %s0x%llx%s ... %s0x%llx%s\n",  cT::getColor(cT::fG::green).c_str(),
+				printf("Found the %s address\t= %s0x%llx%s ... %s0x%llx%s\n", cT::print("engine.dylib", cT::fG::yellow).c_str(),  cT::getColor(cT::fG::green).c_str(),
 					   engine_moduleStartAddress,
 					   cT::getStyle(cT::sT::bold).c_str(),
 					   cT::getColor(cT::fG::green).c_str(),
@@ -86,7 +86,7 @@ public:
 			g_cProc->getModule(mainTask, &client_moduleStartAddress, &client_moduleLength, "/client.dylib");
 			
 			if (client_moduleStartAddress != 0x0) {
-				printf("Found the client.dylib address\t= %s0x%llx%s ... %s0x%llx%s\n",
+				printf("Found the %s address\t= %s0x%llx%s ... %s0x%llx%s\n", cT::print("client.dylib", cT::fG::yellow).c_str(),
 					   cT::getColor(cT::fG::green).c_str(),
 					   client_moduleStartAddress,
 					   cT::getStyle(cT::sT::bold).c_str(),
@@ -269,9 +269,9 @@ private:
 			glowIndexes.clear();
 			
 			if (isValid) {
-				printf("\nm_iGlowIndex\t\t= %s0x%llx%s\n", cT::getColor(cT::fG::green).c_str(), m_iGlowIndex + j, cT::getStyle(cT::sT::bold).c_str());
-				printf("m_dFlashAlpha\t\t= %s0x%llx%s\n", cT::getColor(cT::fG::green).c_str(), m_dFlashAlpha + j, cT::getStyle(cT::sT::bold).c_str());
-				printf("m_fFlashDuration\t\t= %s0x%llx%s\n\n", cT::getColor(cT::fG::green).c_str(), m_fFlashDuration + j, cT::getStyle(cT::sT::bold).c_str());
+				printf("\nuint64_t %s\t\t= %s0x%llx%s\n", cT::print("m_iGlowIndex", cT::fG::yellow).c_str(), cT::getColor(cT::fG::green).c_str(), m_iGlowIndex + j, cT::getStyle(cT::sT::bold).c_str());
+				printf("uint64_t %s\t\t= %s0x%llx%s\n", cT::print("m_dFlashAlpha", cT::fG::yellow).c_str(), cT::getColor(cT::fG::green).c_str(), m_dFlashAlpha + j, cT::getStyle(cT::sT::bold).c_str());
+				printf("uint64_t %s\t= %s0x%llx%s\n\n", cT::print("m_fFlashDuration", cT::fG::yellow).c_str(), cT::getColor(cT::fG::green).c_str(), m_fFlashDuration + j, cT::getStyle(cT::sT::bold).c_str());
 				return;
 			}
 			usleep(1000);
