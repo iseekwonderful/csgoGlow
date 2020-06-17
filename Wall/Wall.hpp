@@ -42,7 +42,7 @@ class Wall {
 		float alpha;
 	};
 	
-	inline static std::atomic<bool> stop = false;
+	static std::atomic<bool> stop;
 	
 public:
 	explicit Wall() {
@@ -346,5 +346,7 @@ private:
 		delete clientScanner;
 	}
 };
+
+std::atomic<bool> Wall::stop;
 
 #endif /* Header_h */

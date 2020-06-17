@@ -249,7 +249,7 @@
 		106534FF1CE77CA90013D2AE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CODE_SIGN_IDENTITY = "-";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -258,7 +258,7 @@
 		106535001CE77CA90013D2AE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CODE_SIGN_IDENTITY = "-";
 				GCC_OPTIMIZATION_LEVEL = 3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
