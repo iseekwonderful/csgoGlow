@@ -49,12 +49,12 @@ uint64_t m_dwGlowStructSize						= 0x40;
 uint64_t m_dwGlowColorStruct					= 0x8;
 uint64_t m_dwGlowEnable							= 0x28;
 uint64_t m_iGlowIndex							= 0xAD68; //0xAD48 //0xAD2C
-uint64_t m_iHealth								= 0x138;
+uint64_t m_bDormant								= 0x125;
 uint64_t m_iTeam								= 0x12C;
+uint64_t m_iHealth								= 0x138;
 uint64_t m_bLifeState							= 0x297;
 uint64_t m_dFlashAlpha							= 0xAD4C; //0xAD2C
 uint64_t m_fFlashDuration						= 0xAD50; //0xAD30
-uint64_t m_bDormant								= 0x125;
 uint64_t m_bSpotted								= 0xECD;
 uint64_t m_bSpottedByMask						= 0xF10;
 
@@ -88,14 +88,5 @@ uint64_t m_dwIsInGame                           = 0x1a8; //0x198
 uint64_t m_szMapName                            = 0x32C; //0x31C
 //uint64_t m_dwGetMaxClients                      = 0x3A0;
 //uint64_t m_setViewAngle                         = 0x8E20;
-
-// my kills 0x7F8553149618
-// my death 0x7F8553149620
-// my namet 0x7f85531497A4
-
-
-// kills ct 0x7F855CCA7418
-// death ct 0x7F855CCA7420
-// namet ct 0x7F85350D5A10
 
 #endif /*Offsets_hpp*/

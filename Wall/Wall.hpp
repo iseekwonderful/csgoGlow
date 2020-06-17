@@ -121,6 +121,7 @@ public:
 	}
 	
 	~Wall() {
+		stop.store(true);
 		if (g_cProc)
 			delete g_cProc;
 		if (mem)
@@ -193,20 +194,16 @@ private:
 				
 				if (mem->read<int>(entityAddress + m_iTeam) != iTeamNum) {
 					// Enemy glow colors
-					color = {
-						float((100 - health)/100.0),
-						float((health)/100.0),
-						0.0f,
-						0.6f
-					};
+					color.red = float((100 - health)/100.0);
+					color.green = float((health)/100.0);
+					color.blue = 0.0f;
+					color.alpha = 0.6f;
 				} else {
 					// Teammates glow colors
-					color = {
-						float((100 - health)/100.0),
-						0.0f,
-						float((health)/100.0),
-						0.5f
-					};
+					color.red = float((100 - health)/100.0);
+					color.green = 0.0f;
+					color.blue = float((health)/100.0);
+					color.alpha = 0.5f;
 				}
 				
 				glowBase = dwGlowObjectLoopStartAddress + (m_dwGlowStructSize * mem->read<int>(entityAddress + m_iGlowIndex));
