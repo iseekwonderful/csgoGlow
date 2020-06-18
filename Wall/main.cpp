@@ -27,6 +27,7 @@ void usage(const char* exec) {
 	printf("\t%s [-o <get new offsets>]\n\n", exec);
 	printf("\t\t-o\tget new offsets\n");
 	printf("\t\t-h\tdisplay this message\n");
+	exit(0);
 }
 
 int main(int argc, const char* argv[]) {
