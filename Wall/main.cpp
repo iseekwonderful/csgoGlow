@@ -27,7 +27,6 @@ void usage(const char* exec) {
 	printf("\t%s [-o <get new offsets>]\n\n", exec);
 	printf("\t\t-o\tget new offsets\n");
 	printf("\t\t-h\tdisplay this message\n");
-	exit(0);
 }
 
 int main(int argc, const char* argv[]) {
@@ -37,8 +36,10 @@ int main(int argc, const char* argv[]) {
 	if (argc > 1) {
 		if (std::string(argv[1]) == "-o")
 			getOffsets = true;
-		if (std::string(argv[1]) == "-h")
+		if (std::string(argv[1]) == "-h"){
 			usage(argv[0]);
+			exit(0);
+		}
 	}
 	
 	Wall wall;
