@@ -11,13 +11,12 @@
 //  Edited by Fricker95 on 1/1/20.
 
 /*
- launch with sudo -s
+ Launch with sudo -s
+ Usage: ./Wall [-o] [-h]
+     -o: get new offsets (only use with -insecure launch option flag in CSGO)
+     -h: display this message
  
- stop by typing "stop", "exit" or terminating csgo
- 
- usage: ./Wall [-o]
-     -o: get new offset (shoudl not be used on VAC servers);
- 
+ Stop by typing "stop", "exit" or terminating csgo
  */
 
 #include "Wall.hpp"
@@ -26,8 +25,8 @@ void usage(const char* exec) {
 	printf("\nUsage: \n");
 	printf("\tsudo -s\n");
 	printf("\t%s [-o] [-h]\n\n", exec);
-	printf("\t-o\tget new offsets (only use with -insecure launch option flag in CSGO)\n");
-	printf("\t-h\tdisplay this message\n\n");
+	printf("\t-o:\tget new offsets (only use with -insecure launch option flag in CSGO)\n");
+	printf("\t-h:\tdisplay this message\n\n");
 }
 
 int main(int argc, const char* argv[]) {
