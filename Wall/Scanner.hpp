@@ -15,16 +15,15 @@
 #include <sstream>
 
 class Scanner {
-public:
-    Byte* pRemote = nullptr;
-    const char * module = nullptr;
-    size_t bufferSize;
-    uint64_t moduleStart;
 	MemMngr* mem = nullptr;
-    
+	Byte* pRemote = nullptr;
+	const char * module = nullptr;
+	size_t bufferSize;
+	uint64_t moduleStart;
+public:
     explicit Scanner(uint64_t dwStart, size_t dwSize, MemMngr* mem = nullptr){
-		this->readBuffer(dwStart, dwSize);
 		this->mem = mem;
+		this->readBuffer(dwStart, dwSize);
 	}
     
     ~Scanner() {

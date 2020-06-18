@@ -11,8 +11,8 @@
 //  Edited by Fricker95 on 1/1/20.
 
 #pragma once
-#ifndef Header_h
-#define Header_h
+#ifndef Wall_hpp
+#define Wall_hpp
 
 #include "Scanner.hpp"
 #include "Offsets.hpp"
@@ -24,6 +24,13 @@
 #include <thread>
 
 class Wall {
+	struct Color{
+		float red;
+		float green;
+		float blue;
+		float alpha;
+	};
+	
 	off_t engine_moduleLength = 0;
 	off_t client_moduleLength = 0;
 	
@@ -34,13 +41,6 @@ class Wall {
 	
 	Process* g_cProc = nullptr;
 	MemMngr* mem = nullptr;
-	
-	struct Color{
-		float red;
-		float green;
-		float blue;
-		float alpha;
-	};
 	
 	static std::atomic<bool> stop;
 	
@@ -319,7 +319,7 @@ private:
 																				"xxx????x????xxxx????xxx????xxxxxxx????",
 																				0x22
 																				) + 0x4;
-		
+		//m_dwGlowManager = client_moduleStartAddress + 0x1E24AF0;
 		printf("Glow Manager\t\t\t= %s0x%llx%s\n", cT::getColor(cT::fG::green).c_str(), m_dwGlowManager, cT::getStyle(cT::sT::bold).c_str());
 		/*
 		 m_dwRadarBase = client_moduleStartAddress + clientScanner->getPointer(
@@ -329,7 +329,7 @@ private:
 		 ) + 0x3C;
 		 
 		 printf("Radar Base: 0x%llx\n", m_dwRadarBase);
-		 */
+		*/
 		/*
 		 m_dwPlayerResource = client_moduleStartAddress + clientScanner->getPointer(
 		 (Byte*)"\x55\x48\x89\xE5\x41\x57\x41\x56\x41\x55\x41\x54\x53\x48\x83\xEC\x00\x48\x89\xF3\x48\x8D\x7D\xB0\xBE\x00\x00\x00\x00\xE8\xAE\x2F\xDC\xFF\x4C\x8B\x75\xD0\x48\x8B\x03\x48\x8B\x80\x00\x00\x00\x00\x48\x89\xDF\xFF\xD0\x41\x80\x4E\x00\x00\x49\x89\x46\x00\x48\x8D\x1D\x00\x00\x00\x00\x48\x8B\x3B\x48\x8B\x07\x48\x8B\x80\x00\x00\x00\x00\xFF\xD0\x4C\x8D\x25\x00\x00\x00\x00",
@@ -338,12 +338,11 @@ private:
 		 ) + 0x4;
 		 
 		 printf("Player Resource: 0x%llx\n", m_dwPlayerResource);
-		 */
-		
+		*/
 		delete clientScanner;
 	}
 };
 
 std::atomic<bool> Wall::stop;
 
-#endif /* Header_h */
+#endif /* Wall_hpp */

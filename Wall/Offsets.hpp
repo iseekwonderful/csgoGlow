@@ -53,10 +53,10 @@ uint64_t m_bDormant								= 0x125;
 uint64_t m_iTeam								= 0x12C;
 uint64_t m_iHealth								= 0x138;
 uint64_t m_bLifeState							= 0x297;
-uint64_t m_dFlashAlpha							= 0xAD4C; //0xAD2C
-uint64_t m_fFlashDuration						= 0xAD50; //0xAD30
 uint64_t m_bSpotted								= 0xECD;
 uint64_t m_bSpottedByMask						= 0xF10;
+uint64_t m_dFlashAlpha							= 0xAD4C; //0xAD2C
+uint64_t m_fFlashDuration						= 0xAD50; //0xAD30
 
 /*
 // radar base needs new sig

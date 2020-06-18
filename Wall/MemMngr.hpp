@@ -11,15 +11,14 @@
 #define MemMngr_hpp
 
 #include "Process.hpp"
+
 pid_t mainPid = -1;
 task_t mainTask = 0;
 
-struct Temp_t{
-	char buffer[256];
-};
-
 class MemMngr {
-	
+	struct Temp_t{
+		char buffer[256];
+	};
 public:
 	explicit MemMngr() {}
     
