@@ -12,15 +12,15 @@
 
 #include "Process.hpp"
 
-pid_t mainPid = -1;
-task_t mainTask = 0;
-
 class MemMngr {
 	struct Temp_t{
 		char buffer[256];
 	};
+	Process* g_cProc = nullptr;
 public:
-	explicit MemMngr() {}
+	explicit MemMngr(Process* g_cProc = nullptr) {
+		this->g_cProc = g_cProc;
+	}
     
     ~MemMngr() {}
     
@@ -30,7 +30,7 @@ public:
 			printf("read: 0x%lx\n", (vm_address_t)address);
 		vm_offset_t data;
 		uint32_t sz;
-		auto re = vm_read(mainTask, (vm_address_t)address, extraSize, &data, &sz);
+		auto re = vm_read(g_cProc->mainTask(), (vm_address_t)address, extraSize, &data, &sz);
 		if (re == KERN_SUCCESS){
 			type content = (type)*((type*)data);
 			vm_deallocate(current_task(), data, sz);
@@ -43,7 +43,7 @@ public:
 		uint8_t* buffer = nullptr;
 		vm_offset_t readMem;
 		mach_msg_type_number_t sizeMax = (mach_msg_type_number_t)moduleSize;
-		vm_read(mainTask, (vm_address_t)moduleStart, sizeMax, &readMem, &sizeMax);
+		vm_read(g_cProc->mainTask(), (vm_address_t)moduleStart, sizeMax, &readMem, &sizeMax);
 		uint64_t address = (uint64_t)readMem;
 		buffer = (uint8_t*)address;
 		return buffer;
@@ -55,7 +55,7 @@ public:
 			printf("read: 0x%lx\n", (vm_address_t)address);
 		if (address == 0x0)
 			return false;
-		auto re = vm_write(mainTask, address, (vm_offset_t)&data, sizeof(data));
+		auto re = vm_write(g_cProc->mainTask(), address, (vm_offset_t)&data, sizeof(data));
 		if (re == KERN_SUCCESS)
 			return true;
 		return false;

@@ -26,35 +26,33 @@ public:
 		this->readBuffer(dwStart, dwSize);
 	}
     
-    ~Scanner() {
-        if (!pRemote) {
-            delete[] pRemote;
-        }
-    }
+    ~Scanner() {}
 
 	void readBuffer(uint64_t dwStart, uint64_t dwSize){
-		pRemote = new Byte[dwSize];
 		bufferSize = dwSize;
 		moduleStart = dwStart;
 		pRemote = mem->readData(moduleStart, bufferSize);
 	}
 
 	bool MaskCheck(int nOffset, Byte* btPattern, const char* strMask, int sigLength){
-		for (int i = 0; i < sigLength; i++){
-			if (strMask[i] == '?')
-				continue;
-			if ((strMask[i] == 'x') && (btPattern[i] != pRemote[nOffset + i]))
-				return false;
+		if (pRemote != 0x0) {
+			for (int i = 0; i < sigLength; i++){
+				if (strMask[i] == '?')
+					continue;
+				if ((strMask[i] == 'x') && (btPattern[i] != pRemote[nOffset + i]))
+					return false;
+			}
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	uint64_t Scan(Byte* pSignature, const char* pMask, int sigLength){
-		if (!pRemote)
-			return NULL;
-		for (int i = 0; i < bufferSize; i++){
-			if (MaskCheck(i, pSignature, pMask, sigLength))
-				return moduleStart + i;
+		if (pRemote != 0x0) {
+			for (int i = 0; i < bufferSize; i++){
+				if (MaskCheck(i, pSignature, pMask, sigLength))
+					return moduleStart + i;
+			}
 		}
 		return NULL;
 	}

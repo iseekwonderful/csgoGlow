@@ -24,17 +24,26 @@
 #include <libproc.h>
 #include <sys/stat.h>
 
-
 class Process {
+	pid_t mainPid_ = -1;
+	task_t mainTask_ = 0;
 public:
     explicit Process() {}
     
     ~Process() {}
+	
+	pid_t& mainPid() {
+		return mainPid_;
+	}
+	
+	task_t& mainTask() {
+		return mainTask_;
+	}
     
 	int get(const char* procname){
-		pid_t pids[1024];
 		int numberOfProcesses = proc_listpids(PROC_ALL_PIDS, 0, NULL, 0);
-		proc_listpids(PROC_ALL_PIDS, 0, pids, sizeof(pids));
+		pid_t pids[numberOfProcesses];
+		proc_listpids(PROC_ALL_PIDS, 0, pids, (int)sizeof(pids));
 		for (int i = 0; i < numberOfProcesses; ++i){
 			if (pids[i] == 0)
 				continue;

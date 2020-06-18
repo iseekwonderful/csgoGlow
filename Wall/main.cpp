@@ -33,6 +33,8 @@ int main(int argc, const char* argv[]) {
 	if (argc > 1) {
 		if (std::string(argv[1]) == "-o")
 			getOffsets = true;
+		if (std::string(argv[1]) == "-h")
+			usage();
 	}
 	
 	Wall wall;
