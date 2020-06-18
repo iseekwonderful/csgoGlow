@@ -22,8 +22,11 @@
 
 #include "Wall.hpp"
 
-void usage() {
-	
+void usage(const char* exec) {
+	printf("\nUsage: \n");
+	printf("\t%s [-o <get new offsets>]\n\n", exec);
+	printf("\t\t-o\tget new offsets\n");
+	printf("\t\t-h\tdisplay this message\n");
 }
 
 int main(int argc, const char* argv[]) {
@@ -34,7 +37,7 @@ int main(int argc, const char* argv[]) {
 		if (std::string(argv[1]) == "-o")
 			getOffsets = true;
 		if (std::string(argv[1]) == "-h")
-			usage();
+			usage(argv[0]);
 	}
 	
 	Wall wall;
