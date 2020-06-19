@@ -27,7 +27,7 @@ void usage(const char* exec) {
 	printf("\nUsage: \n");
 	printf("\tsudo -s\n");
 	printf("\t%s [-f <max flash alpha>] [-o] [-h]\n\n", exec);
-	printf("\t-f <flash alpha>:\tAntiflash alpha max amount (default: 100.0, disable: -1)\n");
+	printf("\t-f <flash alpha>:\tAntiflash alpha max amount (default: 100.0, disable: -1, range: [0-2700])\n");
 	printf("\t-o\t\t:\tget new offsets (only use with -insecure launch option flag in CSGO)\n");
 	printf("\t-h\t\t:\tdisplay this message\n\n");
 }
