@@ -30,3 +30,13 @@ sorry for another delay, there some new trouble.
 
 We believe that you know what you are doing. You should get this software for free.
 请确定你在免费试用这个外挂！
+
+
+
+## Usage: 
+	sudo -s
+	./Wall [-f <max flash alpha>] [-o] [-h]
+
+	-f <flash alpha>:	Antiflash flashed alpha max amount (default: 100.0, disable: -1)
+	-o		:	get new offsets (only use with -insecure launch option flag in CSGO)
+	-h		:	display this message
