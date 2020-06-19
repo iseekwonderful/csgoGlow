@@ -37,6 +37,6 @@ We believe that you know what you are doing. You should get this software for fr
 	sudo -s
 	./Wall [-f <max flash alpha>] [-o] [-h]
 
-	-f <flash alpha>:	Antiflash flashed alpha max amount (default: 100.0, disable: -1)
+	-f <flash alpha>:	Antiflash alpha max amount (default: 100.0, disable: -1)
 	-o		:	get new offsets (only use with -insecure launch option flag in CSGO)
 	-h		:	display this message
