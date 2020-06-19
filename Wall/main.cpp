@@ -21,19 +21,36 @@
 
 #include "Wall.hpp"
 
+#include <stdexcept>
+
 void usage(const char* exec) {
 	printf("\nUsage: \n");
 	printf("\tsudo -s\n");
-	printf("\t%s [-o] [-h]\n\n", exec);
-	printf("\t-o:\tget new offsets (only use with -insecure launch option flag in CSGO)\n");
-	printf("\t-h:\tdisplay this message\n\n");
+	printf("\t%s [-f <max flash alpha>] [-o] [-h]\n\n", exec);
+	printf("\t-f <flash alpha>:\tAntiflash flashed alpha max amount (default: 100.0, disable: -1)\n");
+	printf("\t-o\t\t:\tget new offsets (only use with -insecure launch option flag in CSGO)\n");
+	printf("\t-h\t\t:\tdisplay this message\n\n");
 }
 
 int main(int argc, const char* argv[]) {
 	
 	bool getOffsets = false;
+	double maxFlash = 100.0f;
 	
 	if (argc > 1) {
+		if (std::string(argv[1]) == "-f") {
+			if (argc > 2) {
+				try {
+					maxFlash = std::stod(argv[2]);
+				} catch (const std::invalid_argument&) {
+					printf("%s%s%s\n", cT::print("Error: ", cT::fG::red).c_str(), argv[2], cT::print(" is not a number", cT::fG::red).c_str());
+					return 0;
+				} catch (const std::out_of_range&) {
+					printf("%s%s%s\n", cT::print("Error: ", cT::fG::red).c_str(), argv[2], cT::print(" is out of range for a double", cT::fG::red).c_str());
+					return 0;
+				}
+			}
+		}
 		if (std::string(argv[1]) == "-o")
 			getOffsets = true;
 		if (std::string(argv[1]) == "-h"){
@@ -42,7 +59,7 @@ int main(int argc, const char* argv[]) {
 		}
 	}
 	
-	Wall wall;
+	Wall wall(maxFlash);
 	
 	wall.run(getOffsets);
 	

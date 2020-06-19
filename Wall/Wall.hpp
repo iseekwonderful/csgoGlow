@@ -41,10 +41,13 @@ class Wall {
 	off_t client_moduleLength = 0;
 	mach_vm_address_t client_moduleStartAddress;
 	
+	double maxFlash = 100.0f;
+	
 	static std::atomic<bool> stop;
 	
 public:
-	explicit Wall() {
+	explicit Wall(double maxFlash = 100.0f) {
+		this->maxFlash = maxFlash;
 		stop.store(false);
 		g_cProc = new Process;
 		mem = new MemMngr(g_cProc);
@@ -117,19 +120,6 @@ public:
 		if (offsets->client.m_dwGlowManager != 0x0) {
 			printf("Glow Manager\t\t\t= %s0x%llx%s\n", cT::getColor(cT::fG::green).c_str(), offsets->client.m_dwGlowManager, cT::getStyle(cT::sT::bold).c_str());
 		}
-		/*
-		offsets->client.m_dwLocalPlayerAddress = mem->read<uint64_t>(offsets->client.m_dwLocalPlayer);
-		
-		if (offsets->client.m_dwLocalPlayerAddress != 0x0) {
-			printf("Local Player Address\t\t= %s0x%llx%s\n", cT::getColor(cT::fG::green).c_str(),  offsets->client.m_dwLocalPlayerAddress, cT::getStyle(cT::sT::bold).c_str());
-		}
-		
-		offsets->client.m_dwGlowObjectLoopStartAddress = mem->read<uint64_t>(offsets->client.m_dwGlowManager);
-		
-		if (offsets->client.m_dwGlowObjectLoopStartAddress != 0x0) {
-			printf("Glow Object Start\t\t= %s0x%llx%s\n", cT::getColor(cT::fG::green).c_str(),  offsets->client.m_dwGlowObjectLoopStartAddress, cT::getStyle(cT::sT::bold).c_str());
-		}
-		*/
 	}
 	
 	~Wall() {
@@ -195,7 +185,6 @@ private:
 		uint64_t entityAddress;
 		int health;
 		uint64_t glowBase;
-		double maxFlash = 100.0f;
 		
 		for (int i = 0; i < 64; ++i){
 			entityAddress = mem->read<uint64_t>(offsets->client.m_dwEntityList + (offsets->client.m_dwEntityStructSize * i));
@@ -233,7 +222,7 @@ private:
 				}
 				
 				// Anti flash
-				if (offsets->client.m_dwLocalPlayerAddress == entityAddress) {
+				if (offsets->client.m_dwLocalPlayerAddress == entityAddress && maxFlash != -1) {
 					if (mem->read<double>(entityAddress + offsets->client.m_dFlashAlpha) > maxFlash) {
 						mem->write(entityAddress + offsets->client.m_dFlashAlpha, maxFlash);
 					}
