@@ -142,30 +142,27 @@ public:
 		
 		int i_teamNum = 0;
 		
-		while (g_cProc->mainPid() != -1 && g_cProc->mainTask() != 0 && !stop.load()){
+		while (g_cProc->mainPid() != -1 && g_cProc->mainTask() != 0 && !stop.load()) {
 			offsets->client.m_dwLocalPlayerAddress = mem->read<uint64_t>(offsets->client.m_dwLocalPlayer);
-			if (offsets->client.m_dwLocalPlayerAddress != 0x0) {
+			if (offsets->client.m_dwLocalPlayerAddress != 0x0 && offsets->client.m_dwGlowObjectLoopStartAddress != 0x0) {
 				i_teamNum = mem->read<int>(offsets->client.m_dwLocalPlayerAddress + offsets->client.m_iTeam);
-				offsets->client.m_dwGlowObjectLoopStartAddress = mem->read<uint64_t>(offsets->client.m_dwGlowManager);
-				if (offsets->client.m_dwGlowObjectLoopStartAddress != 0x0) {
-					if (getOff) {
-						getOffsets();
-						stop.store(true);
-					} else {
-						applyEntityGlow(i_teamNum);
-					}
-				} else {
-					getClientPointers();
+				if (offsets->client.m_dwGlowObjectLoopStartAddress == 0x0) {
 					offsets->client.m_dwGlowObjectLoopStartAddress = mem->read<uint64_t>(offsets->client.m_dwGlowManager);
-					if (offsets->client.m_dwGlowObjectLoopStartAddress != 0x0)
-						printf("Glow Object Start\t\t= %s0x%llx%s\n", cT::getColor(cT::fG::green).c_str(),  offsets->client.m_dwGlowObjectLoopStartAddress, cT::getStyle(cT::sT::bold).c_str());
+					printf("Glow Object Start\t\t= %s0x%llx%s\n", cT::getColor(cT::fG::green).c_str(),  offsets->client.m_dwGlowObjectLoopStartAddress, cT::getStyle(cT::sT::bold).c_str());
 				}
+				if (getOff) {
+					getOffsets();
+					stop.store(true);
+				}
+				applyEntityGlow(i_teamNum);
+			} else {
+				getClientPointers();
 			}
 			
 			g_cProc->mainPid() = g_cProc->get("csgo_osx64");
-			g_cProc->mainTask() = g_cProc->task(g_cProc->mainPid());
-			usleep(800); // 800
+			usleep(1000); // 800
 		}
+		
 		stop.store(true);
 	}
 	
