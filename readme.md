@@ -39,6 +39,6 @@ We believe that you know what you are doing. You should get this software for fr
 
 	-f <flash alpha>	: Antiflash alpha max amount (default: 100.0, disable: -1, range: [0-2700])
 	-r <refresh rate>	: Refresh rate in microseconds (default: 1000.0)
-	-t			: disables teammate glow
-	-o			: get new offsets (only use with -insecure launch option flag in CSGO)
-	-h			: display this message
+	-t			: Disables teammate glow
+	-o			: Get new offsets (only use with -insecure launch option flag in CSGO)
+	-h			: Display this message
