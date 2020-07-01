@@ -152,7 +152,9 @@ public:
 				i_teamNum = mem->read<int>(offsets->client.m_dwLocalPlayerAddress + offsets->client.m_iTeam);
 				if (offsets->client.m_dwGlowObjectLoopStartAddress == 0x0) {
 					offsets->client.m_dwGlowObjectLoopStartAddress = mem->read<uint64_t>(offsets->client.m_dwGlowManager);
-					printf("Glow Object Start\t\t= %s0x%llx%s\n", cT::getColor(cT::fG::green).c_str(),  offsets->client.m_dwGlowObjectLoopStartAddress, cT::getStyle(cT::sT::bold).c_str());
+					if (offsets->client.m_dwGlowObjectLoopStartAddress != 0x0) {
+						printf("Glow Object Start\t\t= %s0x%llx%s\n", cT::getColor(cT::fG::green).c_str(),  offsets->client.m_dwGlowObjectLoopStartAddress, cT::getStyle(cT::sT::bold).c_str());
+					}
 				}
 				if (getOff) {
 					getOffsets();
@@ -184,8 +186,8 @@ private:
 	void applyEntityGlow(int iTeamNum) {
 		Color color;
 		uint64_t entityAddress;
-		int health;
 		uint64_t glowBase;
+		int health;
 		
 		for (int i = 0; i < 64; ++i){
 			entityAddress = mem->read<uint64_t>(offsets->client.m_dwEntityList + (offsets->client.m_dwEntityStructSize * i));
