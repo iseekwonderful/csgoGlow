@@ -41,12 +41,14 @@ class Wall {
 	off_t client_moduleLength = 0;
 	mach_vm_address_t client_moduleStartAddress;
 	
+	double refreshRate = 1000.0f;
 	double maxFlash = 100.0f;
 	
 	static std::atomic<bool> stop;
 	
 public:
-	explicit Wall(double maxFlash = 100.0f) {
+	explicit Wall(double refreshRate = 1000.0f, double maxFlash = 100.0f) {
+		this->refreshRate = refreshRate;
 		this->maxFlash = maxFlash;
 		stop.store(false);
 		g_cProc = new Process;
@@ -160,7 +162,7 @@ public:
 			}
 			
 			g_cProc->mainPid() = g_cProc->get("csgo_osx64");
-			usleep(1000); // 800
+			usleep(refreshRate); // 800
 		}
 		
 		stop.store(true);

@@ -22,44 +22,61 @@
 #include "Wall.hpp"
 
 #include <stdexcept>
+#include <iostream>
+#include <cstdlib>
+#include <unistd.h>
 
 void usage(const char* exec) {
 	printf("%s\n", cT::print("\nUsage:", cT::fG::green).c_str());
 	printf("\tsudo -s\n");
-	printf("\t%s [-f <max flash alpha>] [-o] [-h]\n\n", cT::print(exec, cT::fG::yellow).c_str());
-	printf("\t-f <flash alpha>:\tAntiflash alpha max amount (default: 100.0, disable: -1, range: [0-2700])\n");
-	printf("\t-o\t\t:\tget new offsets (only use with -insecure launch option flag in CSGO)\n");
-	printf("\t-h\t\t:\tdisplay this message\n\n");
+	printf("\t%s [-f <max flash alpha>] [-r <refresh rate>] [-o] [-h]\n\n", cT::print(exec, cT::fG::yellow).c_str());
+	printf("\t-f <flash alpha>\t:Antiflash alpha max amount (default: 100.0, disable: -1, range: [0-2700])\n");
+	printf("\t-r <refresh rate>\t:Refresh rate in microseconds (default: 1000.0)\n");
+	printf("\t-o\t\t\t:get new offsets (only use with -insecure launch option flag in CSGO)\n");
+	printf("\t-h\t\t\t:display this message\n\n");
 }
 
-int main(int argc, const char* argv[]) {
+int main(int argc, char** argv) {
 	
+	int opt;
 	bool getOffsets = false;
+	double refreshRate = 1000.0f;
 	double maxFlash = 100.0f;
 	
-	if (argc > 1) {
-		if (std::string(argv[1]) == "-f") {
-			if (argc > 2) {
+	while ((opt =  getopt(argc, argv, "f:r:toh")) != -1) {
+		switch (opt) {
+			case 'f':
 				try {
-					maxFlash = std::stod(argv[2]);
+					maxFlash = std::stod(optarg);
 				} catch (const std::invalid_argument&) {
-					printf("%s%s%s\n", cT::print("Error: ", cT::fG::red).c_str(), argv[2], cT::print(" is not a number", cT::fG::red).c_str());
+					printf("%s%s%s\n", cT::print("Error: ", cT::fG::red).c_str(), optarg, cT::print(" is not a number", cT::fG::red).c_str());
 					return 0;
 				} catch (const std::out_of_range&) {
-					printf("%s%s%s\n", cT::print("Error: ", cT::fG::red).c_str(), argv[2], cT::print(" is out of range for a double", cT::fG::red).c_str());
+					printf("%s%s%s\n", cT::print("Error: ", cT::fG::red).c_str(), optarg, cT::print(" is out of range for a double", cT::fG::red).c_str());
 					return 0;
 				}
-			}
-		}
-		if (std::string(argv[1]) == "-o")
-			getOffsets = true;
-		if (std::string(argv[1]) == "-h"){
-			usage(argv[0]);
-			return 0;
+				break;
+			case 'r':
+				try {
+					refreshRate = std::stod(optarg);
+				} catch (const std::invalid_argument&) {
+					printf("%s%s%s\n", cT::print("Error: ", cT::fG::red).c_str(), optarg, cT::print(" is not a number", cT::fG::red).c_str());
+					return 0;
+				} catch (const std::out_of_range&) {
+					printf("%s%s%s\n", cT::print("Error: ", cT::fG::red).c_str(), optarg, cT::print(" is out of range for a double", cT::fG::red).c_str());
+					return 0;
+				}
+				break;
+			case 'o':
+				getOffsets = true;
+				break;
+			case 'h':
+				usage(argv[0]);
+				break;
 		}
 	}
 	
-	Wall wall(maxFlash);
+	Wall wall(refreshRate, maxFlash);
 	
 	wall.run(getOffsets);
 	
