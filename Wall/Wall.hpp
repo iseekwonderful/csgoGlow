@@ -232,9 +232,6 @@ private:
 					if (mem->read<double>(entityAddress + offsets->client.m_dFlashAlpha) > maxFlash) {
 						mem->write(entityAddress + offsets->client.m_dFlashAlpha, maxFlash);
 					}
-					else {
-						mem->write(entityAddress + offsets->client.m_dFlashAlpha, 0.0f);
-					}
 				}
 			}
 		}
