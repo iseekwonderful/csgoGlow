@@ -30,10 +30,11 @@ void usage(const char* exec) {
 	printf("%s\n", cT::print("\nUsage:", cT::fG::green).c_str());
 	printf("\tsudo -s\n");
 	printf("\t%s [-f <max flash alpha>] [-r <refresh rate>] [-o] [-h]\n\n", cT::print(exec, cT::fG::yellow).c_str());
-	printf("\t-f <flash alpha>\t:Antiflash alpha max amount (default: 100.0, disable: -1, range: [0-2700])\n");
-	printf("\t-r <refresh rate>\t:Refresh rate in microseconds (default: 1000.0)\n");
-	printf("\t-o\t\t\t:get new offsets (only use with -insecure launch option flag in CSGO)\n");
-	printf("\t-h\t\t\t:display this message\n\n");
+	printf("\t-f <flash alpha>\t: Antiflash alpha max amount (default: 100.0, disable: -1, range: [0-2700])\n");
+	printf("\t-r <refresh rate>\t: Refresh rate in microseconds (default: 1000.0)\n");
+	printf("\t-t\t\t\t: disables teammate glow\n");
+	printf("\t-o\t\t\t: get new offsets (only use with -insecure launch option flag in CSGO)\n");
+	printf("\t-h\t\t\t: display this message\n\n");
 }
 
 int main(int argc, char** argv) {
@@ -42,12 +43,14 @@ int main(int argc, char** argv) {
 	bool getOffsets = false;
 	double refreshRate = 1000.0f;
 	double maxFlash = 100.0f;
+	bool noTeammates = false;
 	
 	while ((opt =  getopt(argc, argv, "f:r:toh")) != -1) {
 		switch (opt) {
 			case 'f':
 				try {
-					maxFlash = std::stod(optarg);
+					if (strlen(optarg))
+						maxFlash = std::stod(optarg);
 				} catch (const std::invalid_argument&) {
 					printf("%s%s%s\n", cT::print("Error: ", cT::fG::red).c_str(), optarg, cT::print(" is not a number", cT::fG::red).c_str());
 					return 0;
@@ -58,7 +61,8 @@ int main(int argc, char** argv) {
 				break;
 			case 'r':
 				try {
-					refreshRate = std::stod(optarg);
+					if (strlen(optarg))
+						refreshRate = std::stod(optarg);
 				} catch (const std::invalid_argument&) {
 					printf("%s%s%s\n", cT::print("Error: ", cT::fG::red).c_str(), optarg, cT::print(" is not a number", cT::fG::red).c_str());
 					return 0;
@@ -67,16 +71,19 @@ int main(int argc, char** argv) {
 					return 0;
 				}
 				break;
+			case 't':
+				noTeammates = true;
+				break;
 			case 'o':
 				getOffsets = true;
 				break;
 			case 'h':
 				usage(argv[0]);
-				break;
+				exit(0);
 		}
 	}
 	
-	Wall wall(refreshRate, maxFlash);
+	Wall wall(refreshRate, maxFlash, noTeammates);
 	
 	wall.run(getOffsets);
 	

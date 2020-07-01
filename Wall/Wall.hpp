@@ -43,13 +43,15 @@ class Wall {
 	
 	double refreshRate = 1000.0f;
 	double maxFlash = 100.0f;
+	bool noTeammates = false;
 	
 	static std::atomic<bool> stop;
 	
 public:
-	explicit Wall(double refreshRate = 1000.0f, double maxFlash = 100.0f) {
+	explicit Wall(double refreshRate = 1000.0f, double maxFlash = 100.0f, bool noTeammates = false) {
 		this->refreshRate = refreshRate;
 		this->maxFlash = maxFlash;
+		this->noTeammates = noTeammates;
 		stop.store(false);
 		g_cProc = new Process;
 		mem = new MemMngr(g_cProc);
@@ -146,7 +148,7 @@ public:
 		
 		while (g_cProc->mainPid() != -1 && g_cProc->mainTask() != 0 && !stop.load()) {
 			offsets->client.m_dwLocalPlayerAddress = mem->read<uint64_t>(offsets->client.m_dwLocalPlayer);
-			if (offsets->client.m_dwLocalPlayerAddress != 0x0 && offsets->client.m_dwGlowObjectLoopStartAddress != 0x0) {
+			if (offsets->client.m_dwLocalPlayerAddress != 0x0) {
 				i_teamNum = mem->read<int>(offsets->client.m_dwLocalPlayerAddress + offsets->client.m_iTeam);
 				if (offsets->client.m_dwGlowObjectLoopStartAddress == 0x0) {
 					offsets->client.m_dwGlowObjectLoopStartAddress = mem->read<uint64_t>(offsets->client.m_dwGlowManager);
@@ -191,6 +193,11 @@ private:
 			if (entityAddress <= 0x0 || entityAddress == 0)
 				continue;
 			
+			int team = mem->read<int>(entityAddress + offsets->client.m_iTeam);
+			
+			if (noTeammates && entityAddress != offsets->client.m_dwLocalPlayerAddress && team == iTeamNum)
+				continue;
+			
 			if (!mem->read<bool>(entityAddress + offsets->client.m_bDormant) && !mem->read<bool>(entityAddress + offsets->client.m_bLifeState)) {
 				
 				health = mem->read<int>(entityAddress + offsets->client.m_iHealth);
@@ -198,7 +205,7 @@ private:
 				if (health == 0)
 					health = 100;
 				
-				if (mem->read<int>(entityAddress + offsets->client.m_iTeam) != iTeamNum) {
+				if (team != iTeamNum) {
 					// Enemy glow colors
 					color.red = float((100 - health)/100.0);
 					color.green = float((health)/100.0);
