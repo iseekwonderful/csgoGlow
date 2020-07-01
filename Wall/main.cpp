@@ -32,9 +32,9 @@ void usage(const char* exec) {
 	printf("\t%s [-f <max flash alpha>] [-r <refresh rate>] [-o] [-h]\n\n", cT::print(exec, cT::fG::yellow).c_str());
 	printf("\t-f <flash alpha>\t: Antiflash alpha max amount (default: 100.0, disable: -1, range: [0-2700])\n");
 	printf("\t-r <refresh rate>\t: Refresh rate in microseconds (default: 1000.0)\n");
-	printf("\t-t\t\t\t: disables teammate glow\n");
-	printf("\t-o\t\t\t: get new offsets (only use with -insecure launch option flag in CSGO)\n");
-	printf("\t-h\t\t\t: display this message\n\n");
+	printf("\t-t\t\t\t: Disables teammate glow\n");
+	printf("\t-o\t\t\t: Get new offsets (only use with -insecure launch option flag in CSGO)\n");
+	printf("\t-h\t\t\t: Display this message\n\n");
 }
 
 int main(int argc, char** argv) {
