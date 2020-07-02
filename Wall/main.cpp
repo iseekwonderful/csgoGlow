@@ -11,13 +11,18 @@
 //  Edited by Fricker95 on 1/1/20.
 
 /*
- Launch with sudo -s
- Usage: ./Wall [-o] [-h]
-     -o: get new offsets (only use with -insecure launch option flag in CSGO)
-     -h: display this message
+ Usage:
+ sudo -s
+ ./Wall [-f <max flash alpha>] [-r <refresh rate>] [-t] [-o] [-h]
+ 
+ -f <flash alpha>	: Antiflash alpha max amount (default: 100.0, disable: -1, range: [0-2700])
+ -r <refresh rate>	: Refresh rate in microseconds (default: 2000.0)
+ -t			        : Disables teammate glow
+ -o			        : Get new offsets (only use with -insecure launch option flag in CSGO)
+ -h			        : Display this message
  
  Stop by typing "stop", "exit" or terminating csgo
- */
+*/
 
 #include "Wall.hpp"
 
@@ -83,9 +88,13 @@ int main(int argc, char** argv) {
 		}
 	}
 	
-	Wall wall(refreshRate, maxFlash, noTeammates);
+	Wall* wall = new Wall(refreshRate, maxFlash, noTeammates);
 	
-	wall.run(getOffsets);
+	wall->run(getOffsets);
+	
+	delete wall;
+	
+	std::system("clear");
 	
 	return 0;
 }

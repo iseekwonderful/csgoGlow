@@ -52,19 +52,22 @@ public:
 		this->refreshRate = refreshRate;
 		this->maxFlash = maxFlash;
 		this->noTeammates = noTeammates;
+		
 		stop.store(false);
+		
 		g_cProc = new Process;
 		mem = new MemMngr(g_cProc);
 		offsets = new Offsets;
-		g_cProc->mainPid() = g_cProc->get("csgo_osx64");
-		g_cProc->mainTask() = g_cProc->task(g_cProc->mainPid());
 		
-		if (g_cProc->mainPid() == -1){
+		g_cProc->mainPid() = g_cProc->get("csgo_osx64");
+		
+		if (g_cProc->mainPid() != -1){
+			printf("Found CSGO's PID\t\t= %s\n", cT::print(std::to_string(g_cProc->mainPid()).c_str(), cT::fG::green, cT::sT::bold).c_str());
+			g_cProc->mainTask() = g_cProc->task(g_cProc->mainPid());
+		} else {
 			printf("%s\n", cT::print("Error: Can't find CSGO's PID", cT::fG::red, cT::sT::bold).c_str());
 			deinit();
 			exit(0);
-		} else {
-			printf("Found CSGO's PID\t\t= %s\n", cT::print(std::to_string(g_cProc->mainPid()).c_str(), cT::fG::green, cT::sT::bold).c_str());
 		}
 		
 		if (g_cProc->mainTask()){
@@ -141,8 +144,8 @@ public:
 	}
 	
 	void run(bool getOff = false) {
-		std::thread td(stopThread);
-		td.detach();
+		std::thread s_thread(&Wall::stopThread, this);
+		s_thread.detach();
 		
 		int i_teamNum = 0;
 		
@@ -162,10 +165,12 @@ public:
 				}
 				applyEntityGlow(i_teamNum);
 			} else {
+				//getEnginePointers();
 				getClientPointers();
 			}
 			
 			g_cProc->mainPid() = g_cProc->get("csgo_osx64");
+			g_cProc->mainTask() = g_cProc->task(g_cProc->mainPid());
 			usleep(refreshRate); // 800
 		}
 		
@@ -173,13 +178,14 @@ public:
 	}
 	
 private:
-	inline static void stopThread(){
+	void stopThread() {
 		std::string str;
 		while (!stop.load()) {
 			std::cin >> str;
 			if (str == "stop" || str == "exit") {
 				stop.store(true);
 			}
+			usleep(refreshRate);
 		}
 	}
 	
@@ -192,7 +198,7 @@ private:
 		for (int i = 0; i < 64; ++i){
 			entityAddress = mem->read<uint64_t>(offsets->client.m_dwEntityList + (offsets->client.m_dwEntityStructSize * i));
 			
-			if (entityAddress <= 0x0 || entityAddress == 0)
+			if (entityAddress <= 0x0)
 				continue;
 			
 			int team = mem->read<int>(entityAddress + offsets->client.m_iTeam);
@@ -293,7 +299,6 @@ private:
 	}
 	
 	void getEnginePointers() {
-		
 		Scanner* engineScanner = new Scanner(engine_moduleStartAddress, engine_moduleLength, mem);
 		
 		offsets->engine.m_dwCEngineClient = engine_moduleStartAddress + engineScanner->getPointer(
@@ -301,11 +306,11 @@ private:
 																				  "xxxxxx?????xx??xxxxxxxxxxxxxxxxx",
 																				  0x7
 																								  ) + 0x4;
+		
 		delete engineScanner;
 	}
 	
 	void getClientPointers() {
-		
 		Scanner* clientScanner = new Scanner(client_moduleStartAddress, client_moduleLength, mem);
 		
 		offsets->client.m_dwLocalPlayer = client_moduleStartAddress + clientScanner->getPointer(
@@ -345,6 +350,7 @@ private:
 		 
 		 printf("Player Resource: 0x%llx\n", offsets->client.m_dwPlayerResource);
 		*/
+		
 		delete clientScanner;
 	}
 };
