@@ -21,7 +21,6 @@ public:
 		uint64_t m_dwPlayerResource;
 		uint64_t m_dwRadarBase;
 		
-		uint64_t m_dwEntityListSize					    = 0x40;
 		uint64_t m_dwEntityStructSize					= 0x20;
 		uint64_t m_dwGlowStructSize						= 0x40;
 		uint64_t m_dwGlowColorStruct					= 0x8;

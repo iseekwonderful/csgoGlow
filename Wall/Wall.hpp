@@ -208,8 +208,9 @@ private:
 		uint64_t entityAddress;
 		uint64_t glowBase;
 		int health;
+		int glowCount = mem->read<int>(off->client.m_dwGlowManager + off->client.m_dwGlowCount);
 		
-		for (int i = 0; i < off->client.m_dwEntityListSize; ++i){
+		for (int i = 0; i < glowCount; ++i){
 			
 			entityAddress = mem->read<uint64_t>(off->client.m_dwEntityList + (off->client.m_dwEntityStructSize * i));
 			
