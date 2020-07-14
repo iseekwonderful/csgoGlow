@@ -236,24 +236,27 @@ private:
 				if (glowBase != 0x0) {
 					glow = mem->read<sGlowEntity>(glowBase);
 					
-					if (team != iTeamNum) {
-						// Enemy glow colors
-						glow.r = float((100 - health)/100.0);
-						glow.g = float((health)/100.0);
-						glow.b = 0.0f;
-						glow.a = 0.6f;
-					} else {
-						// Teammates glow colors
-						glow.r = float((100 - health)/100.0);
-						glow.g = 0.0f;
-						glow.b = float((health)/100.0);
-						glow.a = 0.6f;
+					if (glow.isValidGlowEntity()) {
+						
+						if (team != iTeamNum) {
+							// Enemy glow colors
+							glow.r = float((100 - health)/100.0);
+							glow.g = float((health)/100.0);
+							glow.b = 0.0f;
+							glow.a = 0.6f;
+						} else {
+							// Teammates glow colors
+							glow.r = float((100 - health)/100.0);
+							glow.g = 0.0f;
+							glow.b = float((health)/100.0);
+							glow.a = 0.6f;
+						}
+						
+						// Enables Glow
+						glow.RenderWhenOccluded = true;
+						glow.RenderWhenUnoccluded = false;
+						mem->write<sGlowEntity>(glowBase, glow);
 					}
-					
-					// Enables Glow
-					glow.RenderWhenOccluded = true;
-					glow.RenderWhenUnoccluded = false;
-					mem->write<sGlowEntity>(glowBase, glow);
 				}
 				
 				// Anti flash
@@ -263,9 +266,6 @@ private:
 					}
 				}
 			}
-			
-			if (mem->read<uint64_t>(entityAddress + off->client.m_dwEntityStructSize - 0xe) == 0x0)
-				break;
 		}
 	}
 	
