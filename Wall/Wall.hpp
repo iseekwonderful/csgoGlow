@@ -166,21 +166,16 @@ public:
 			if (off->engine.m_dwCEngineClientBase != 0x0) {
 				if (mem->read<int>(off->engine.m_dwCEngineClientBase + off->engine.m_dwIsInGame) == 6) {
 					off->client.m_dwLocalPlayerBase = mem->read<uint64_t>(off->client.m_dwLocalPlayer);
-					if (off->client.m_dwLocalPlayerBase != 0x0) {
+					if (off->client.m_dwLocalPlayerBase != 0x0 && off->client.m_dwGlowObjectLoopStartBase != 0x0) {
 						i_teamNum = mem->read<int>(off->client.m_dwLocalPlayerBase + off->client.m_iTeam);
-						if (off->client.m_dwGlowObjectLoopStartBase == 0x0) {
-							off->client.m_dwGlowObjectLoopStartBase = mem->read<uint64_t>(off->client.m_dwGlowManager);
-							if (off->client.m_dwGlowObjectLoopStartBase != 0x0) {
-								printf("Glow Object Loop Start\t\t= %s0x%llx%s\n", cT::getColor(cT::fG::green).c_str(),  off->client.m_dwGlowObjectLoopStartBase, cT::getStyle(cT::sT::bold).c_str());
-							} else {
-								getClientPointers();
-							}
-						}
 						if (getOff) {
 							getOffsets();
 							stop.store(true);
 						}
 						applyEntityGlow(i_teamNum);
+					} else {
+						getClientPointers();
+						off->client.m_dwGlowObjectLoopStartBase = mem->read<uint64_t>(off->client.m_dwGlowManager);
 					}
 				}
 			} else {
