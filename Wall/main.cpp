@@ -88,11 +88,9 @@ int main(int argc, char** argv) {
 		}
 	}
 	
-	Wall* wall = new Wall(refreshRate, maxFlash, noTeammates);
+	Wall wall(refreshRate, maxFlash, noTeammates);
 	
-	wall->run(getOffsets);
-	
-	delete wall;
+	wall.run(getOffsets);
 	
 	std::system("clear");
 	

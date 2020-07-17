@@ -45,6 +45,8 @@ class Wall {
 	Process* g_cProc = nullptr;
 	MemMngr* mem = nullptr;
 	sOffsets* off = nullptr;
+	Scanner* engineScanner = nullptr;
+	Scanner* clientScanner = nullptr;
 	
 	off_t engine_moduleLength = 0;
 	mach_vm_address_t engine_moduleStartAddress;
@@ -120,6 +122,9 @@ public:
 			exit(0);
 		}
 		
+		engineScanner = new Scanner(engine_moduleStartAddress, engine_moduleLength, mem);
+		clientScanner = new Scanner(client_moduleStartAddress, client_moduleLength, mem);
+		
 		getEnginePointers();
 		
 		if (off->engine.m_dwCEngineClient != 0x0)
@@ -152,6 +157,10 @@ public:
 			delete mem;
 		if (off)
 			delete off;
+		if (engineScanner)
+			delete engineScanner;
+		if (clientScanner)
+			delete clientScanner;
 	}
 	
 	void run(bool getOff = false) {
@@ -162,8 +171,8 @@ public:
 		 
 		int i_teamNum = 0;
 		
-		while (g_cProc->mainPid() != -1 && g_cProc->mainTask() != 0 && !stop.load()) {
-			if (off->engine.m_dwCEngineClientBase != 0x0) {
+		while (g_cProc->mainPid() != -1 && !stop.load()) {
+			if (g_cProc->mainTask() != 0 && off->engine.m_dwCEngineClientBase != 0x0) {
 				if (mem->read<int>(off->engine.m_dwCEngineClientBase + off->engine.m_dwIsInGame) == 6) {
 					off->client.m_dwLocalPlayerBase = mem->read<uint64_t>(off->client.m_dwLocalPlayer);
 					if (off->client.m_dwLocalPlayerBase != 0x0 && off->client.m_dwGlowObjectLoopStartBase != 0x0) {
@@ -318,20 +327,14 @@ private:
 	}
 	
 	void getEnginePointers() {
-		Scanner* engineScanner = new Scanner(engine_moduleStartAddress, engine_moduleLength, mem);
-		
 		off->engine.m_dwCEngineClient = engine_moduleStartAddress + engineScanner->getPointer(
 																				  (Byte*)"\x55\x48\x89\xE5\x48\x8B\x00\x00\x00\x00\x00\x48\x83\x00\x00\x5D\xC3\x66\x66\x66\x66\x66\x66\x2E\x0F\x1F\x84\x00\x00\x00\x00\x00",
 																				  "xxxxxx?????xx??xxxxxxxxxxxxxxxxx",
 																				  0x7
 																								  ) + 0x4;
-		
-		delete engineScanner;
 	}
 	
 	void getClientPointers() {
-		Scanner* clientScanner = new Scanner(client_moduleStartAddress, client_moduleLength, mem);
-		
 		off->client.m_dwLocalPlayer = client_moduleStartAddress + clientScanner->getPointer(
 																				(Byte*)"\x89\xD6\x41\x89\x00\x49\x89\x00\x48\x8B\x1D\x00\x00\x00\x00\x48\x85\xDB\x74\x00",
 																				"xxxx?xx?xxx????xxxx?",
@@ -367,8 +370,6 @@ private:
 		 
 		 printf("Player Resource: 0x%llx\n", off->client.m_dwPlayerResource);
 		*/
-		
-		delete clientScanner;
 	}
 };
 
