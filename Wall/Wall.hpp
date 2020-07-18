@@ -175,7 +175,8 @@ public:
 			if (g_cProc->mainTask() != 0 && off->engine.m_dwCEngineClientBase != 0x0) {
 				if (mem->read<int>(off->engine.m_dwCEngineClientBase + off->engine.m_dwIsInGame) == 6) {
 					off->client.m_dwLocalPlayerBase = mem->read<uint64_t>(off->client.m_dwLocalPlayer);
-					if (off->client.m_dwLocalPlayerBase != 0x0 && off->client.m_dwGlowObjectLoopStartBase != 0x0) {
+					off->client.m_dwPlayerResource = mem->read<uint64_t>(client_moduleStartAddress + off->client.m_dwPlayerResourceOffset);
+					if (off->client.m_dwLocalPlayerBase != 0x0 && off->client.m_dwGlowObjectLoopStartBase != 0x0 && off->client.m_dwPlayerResource != 0x0) {
 						i_teamNum = mem->read<int>(off->client.m_dwLocalPlayerBase + off->client.m_iTeam);
 						if (getOff) {
 							getOffsets();
@@ -203,7 +204,7 @@ private:
 		std::string str;
 		while (!stop.load()) {
 			std::cin >> str;
-			if (str == "stop" || str == "exit") {
+			if (str == "q" || str == "quit" || str == "stop" || str == "exit") {
 				stop.store(true);
 			}
 			usleep(refreshRate);
@@ -224,12 +225,20 @@ private:
 			if (entityAddress <= 0x0)
 				continue;
 			
-			int team = mem->read<int>(entityAddress + off->client.m_iTeam);
-			
-			if (noTeammates && entityAddress != off->client.m_dwLocalPlayerBase && team == iTeamNum)
-				continue;
-			
-			if (!mem->read<bool>(entityAddress + off->client.m_bDormant) && !mem->read<bool>(entityAddress + off->client.m_bLifeState)) {
+			if (mem->read<bool>(off->client.m_dwPlayerResource + off->client.m_bConnected + (0x1 * i)) && !mem->read<bool>(entityAddress + off->client.m_bDormant) && !mem->read<bool>(entityAddress + off->client.m_bLifeState)) {
+				
+				// Anti flash
+				if (off->client.m_dwLocalPlayerBase == entityAddress && maxFlash != -1) {
+					if (mem->read<double>(entityAddress + off->client.m_dFlashAlpha) > maxFlash) {
+						mem->write<double>(entityAddress + off->client.m_dFlashAlpha, maxFlash);
+					}
+					continue;
+				}
+				
+				int team = mem->read<int>(entityAddress + off->client.m_iTeam);
+				
+				if (noTeammates && entityAddress != off->client.m_dwLocalPlayerBase && team == iTeamNum)
+					continue;
 				
 				health = mem->read<int>(entityAddress + off->client.m_iHealth);
 				
@@ -260,13 +269,6 @@ private:
 						glow.RenderWhenOccluded = true;
 						glow.RenderWhenUnoccluded = false;
 						mem->write<sGlowEntity>(glowBase, glow);
-					}
-				}
-				
-				// Anti flash
-				if (off->client.m_dwLocalPlayerBase == entityAddress && maxFlash != -1) {
-					if (mem->read<double>(entityAddress + off->client.m_dFlashAlpha) > maxFlash) {
-						mem->write<double>(entityAddress + off->client.m_dFlashAlpha, maxFlash);
 					}
 				}
 			}
