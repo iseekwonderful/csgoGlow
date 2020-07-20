@@ -175,8 +175,7 @@ public:
 			if (g_cProc->mainTask() != 0 && off->engine.m_dwCEngineClientBase != 0x0) {
 				if (mem->read<int>(off->engine.m_dwCEngineClientBase + off->engine.m_dwIsInGame) == 6) {
 					off->client.m_dwLocalPlayerBase = mem->read<uint64_t>(off->client.m_dwLocalPlayer);
-					off->client.m_dwPlayerResource = mem->read<uint64_t>(client_moduleStartAddress + off->client.m_dwPlayerResourceOffset);
-					if (off->client.m_dwLocalPlayerBase != 0x0 && off->client.m_dwGlowObjectLoopStartBase != 0x0 && off->client.m_dwPlayerResource != 0x0) {
+					if (off->client.m_dwLocalPlayerBase != 0x0 && off->client.m_dwGlowObjectLoopStartBase != 0x0 ) {
 						i_teamNum = mem->read<int>(off->client.m_dwLocalPlayerBase + off->client.m_iTeam);
 						if (getOff) {
 							getOffsets();
@@ -192,7 +191,7 @@ public:
 				getEnginePointers();
 			}
 			g_cProc->mainPid() = g_cProc->get("csgo_osx64");
-			g_cProc->mainTask() = g_cProc->task(g_cProc->mainPid());
+			//g_cProc->mainTask() = g_cProc->task(g_cProc->mainPid());
 			usleep(refreshRate); // 800
 		}
 		
@@ -225,7 +224,7 @@ private:
 			if (entityAddress <= 0x0)
 				continue;
 			
-			if (mem->read<bool>(off->client.m_dwPlayerResource + off->client.m_bConnected + (0x1 * i)) && !mem->read<bool>(entityAddress + off->client.m_bDormant) && !mem->read<bool>(entityAddress + off->client.m_bLifeState)) {
+			if (!mem->read<bool>(entityAddress + off->client.m_bDormant) && !mem->read<bool>(entityAddress + off->client.m_bLifeState)) {
 				
 				// Anti flash
 				if (off->client.m_dwLocalPlayerBase == entityAddress && maxFlash != -1) {
