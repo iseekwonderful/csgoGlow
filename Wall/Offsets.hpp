@@ -7,8 +7,8 @@
 //
 
 #pragma once
-#ifndef Offsets_hpp
-#define Offsets_hpp
+#ifndef OFFSETS_HPP
+#define OFFSETS_HPP
 
 struct sOffsets {
 public:
@@ -19,22 +19,25 @@ public:
 		uint64_t m_dwLocalPlayer;
 		uint64_t m_dwLocalPlayerBase;
 		uint64_t m_dwPlayerResource;
+		uint64_t m_dwPlayerResourceBase;
+		uint64_t m_dwRadarManager;
 		uint64_t m_dwRadarBase;
 		
 		uint64_t m_dwEntityStructSize					= 0x20;
 		uint64_t m_dwGlowStructSize						= 0x40;
 		uint64_t m_dwGlowColorStruct					= 0x8;
-		uint64_t m_dwGlowCount							= 0x10;
 		uint64_t m_dwGlowEnable							= 0x28;
-		uint64_t m_iGlowIndex							= 0xAD68; // 0xAD48 // 0xAD2C
 		uint64_t m_bDormant								= 0x125;
 		uint64_t m_iTeam								= 0x12C;
 		uint64_t m_iHealth								= 0x138;
+		uint64_t m_iFlag								= 0x13C;
 		uint64_t m_bLifeState							= 0x297;
 		uint64_t m_bSpotted								= 0xECD;
 		uint64_t m_bSpottedByMask						= 0xF10;
+		uint64_t m_iShotFired							= 0xACC0;
 		uint64_t m_dFlashAlpha							= 0xAD4C; // 0xAD2C
 		uint64_t m_fFlashDuration						= 0xAD50; // 0xAD30
+		uint64_t m_iGlowIndex							= 0xAD68; // 0xAD48 // 0xAD2C
 		
 		/*
 		 // radar base needs new sig
@@ -44,20 +47,20 @@ public:
 		 uint64_t m_iRadarHealth                 		= 0x168;
 		 uint64_t m_szRadarName                  		= 0x16C;
 		*/
-		
+		/*
 		// player resource needs new sig
-		uint64_t m_dwPlayerResourceOffset              = 0x1602490;
-		uint64_t m_iKills                              = 0x12BC; // 0x1288;
-		uint64_t m_iAssists                            = 0x13C0; // 0x138C;
-		uint64_t m_iDeaths                             = 0x14C4; // 0x1490;
+		uint64_t m_iKills                              = 0x1288;
+		uint64_t m_iAssists                            = 0x138C;
+		uint64_t m_iDeaths                             = 0x1490;
 		uint64_t m_iTeam2                              = 0x15C8;
 		uint64_t m_iHealth2                            = 0x1814;
-		uint64_t m_bHasDefuser                         = 0x1E81; // 0x1E51;
-		uint64_t m_bConnected                          = 0x1EC2; // 0x1594;
-		uint64_t m_bHasHelmet                          = 0x1CA1; // 0x1E92;
-		//uint64_t m_iArmor                              = 0x1ED8;
-		//uint64_t m_iCompetitiveRanking                 = 0x20E0;
-		//uint64_t m_iCompetitiveWins                    = 0x21E4;
+		uint64_t m_bHasDefuser                         = 0x1E51;
+		uint64_t m_bConnected                          = 0x1594;
+		uint64_t m_bHasHelmet                          = 0x1E92;
+		uint64_t m_iArmor                              = 0x1ED8;
+		uint64_t m_iCompetitiveRanking                 = 0x20E0;
+		uint64_t m_iCompetitiveWins                    = 0x21E4;
+		*/
 	} client;
 	
 	struct sEngine {
@@ -69,7 +72,7 @@ public:
 		//uint64_t m_iLocalPlayer                         = 0x210;
 		//uint64_t m_szMapFile                            = 0x218;
 		uint64_t m_szMapName                            = 0x32C; // 0x31C
-		//uint64_t m_dwGetMaxClients                      = 0x3A0;
+		uint64_t m_iGetMaxClients                      = 0x428; // 0x3A0;
 		//uint64_t m_setViewAngle                         = 0x8E20;
 	} engine;
 	
@@ -96,5 +99,5 @@ public:
 	};
 };
 
-#endif /*Offsets_hpp*/
+#endif /*OFFSETS_HPP*/
 

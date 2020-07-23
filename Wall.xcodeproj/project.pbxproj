@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		106535051CE861C60013D2AE /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 106535041CE861C60013D2AE /* ApplicationServices.framework */; };
+		6057394224CA1F81006E0D11 /* Process.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6057394124CA1F81006E0D11 /* Process.cpp */; };
+		6057394424CA203B006E0D11 /* MemMngr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6057394324CA203B006E0D11 /* MemMngr.cpp */; };
+		6057394624CA212B006E0D11 /* Scanner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6057394524CA212B006E0D11 /* Scanner.cpp */; };
+		6057394824CA219A006E0D11 /* Wall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6057394724CA219A006E0D11 /* Wall.cpp */; };
 		EA7F508223867EDD00DE777B /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA7F508023867EDD00DE777B /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -28,6 +32,10 @@
 		106535041CE861C60013D2AE /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
 		6011E95F24982B3200F4BEDA /* Wall.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Wall.hpp; sourceTree = "<group>"; };
 		60496661249941CC004DE196 /* ColorText.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ColorText.hpp; sourceTree = "<group>"; };
+		6057394124CA1F81006E0D11 /* Process.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Process.cpp; sourceTree = "<group>"; };
+		6057394324CA203B006E0D11 /* MemMngr.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MemMngr.cpp; sourceTree = "<group>"; };
+		6057394524CA212B006E0D11 /* Scanner.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Scanner.cpp; sourceTree = "<group>"; };
+		6057394724CA219A006E0D11 /* Wall.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Wall.cpp; sourceTree = "<group>"; };
 		EA7F508023867EDD00DE777B /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		EA7F508123867EDD00DE777B /* Offsets.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Offsets.hpp; sourceTree = "<group>"; };
 		EA87B8672380933800C4597F /* MemMngr.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MemMngr.hpp; sourceTree = "<group>"; };
@@ -70,9 +78,13 @@
 				EA7F508123867EDD00DE777B /* Offsets.hpp */,
 				60496661249941CC004DE196 /* ColorText.hpp */,
 				EA87B8682380933800C4597F /* Process.hpp */,
+				6057394124CA1F81006E0D11 /* Process.cpp */,
 				EA87B8672380933800C4597F /* MemMngr.hpp */,
+				6057394324CA203B006E0D11 /* MemMngr.cpp */,
 				EA87B8692380933800C4597F /* Scanner.hpp */,
+				6057394524CA212B006E0D11 /* Scanner.cpp */,
 				6011E95F24982B3200F4BEDA /* Wall.hpp */,
+				6057394724CA219A006E0D11 /* Wall.cpp */,
 				EA7F508023867EDD00DE777B /* main.cpp */,
 			);
 			path = Wall;
@@ -136,6 +148,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				EA7F508223867EDD00DE777B /* main.cpp in Sources */,
+				6057394424CA203B006E0D11 /* MemMngr.cpp in Sources */,
+				6057394624CA212B006E0D11 /* Scanner.cpp in Sources */,
+				6057394224CA1F81006E0D11 /* Process.cpp in Sources */,
+				6057394824CA219A006E0D11 /* Wall.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

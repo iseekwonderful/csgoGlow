@@ -1,5 +1,5 @@
 //
-//  ColorText.hpp
+//  ColorTextchpp
 //  Wall
 //
 //  Created by Nicolas Fricker on 6/16/20.
@@ -7,47 +7,47 @@
 //
 
 #pragma once
-#ifndef ColorText_h
-#define ColorText_h
+#ifndef COLORTEXT_HPP
+#define COLORTEXT_HPP
 
 #include <iostream>
 #include <string>
 
 namespace cT {
 	namespace {
-		const char* init = "\x1b[";
-		const char* term = "m";
+		static const char* init = "\x1b[";
+		static const char* term = "m";
 	};
 	namespace fG {
-		const char* black = "30";
-		const char* red = "31";
-		const char* green = "32";
-		const char* yellow = "33";
-		const char* blue = "34";
-		const char* magenta = "35";
-		const char* cyan = "36";
-		const char* white = "37";
-		const char* defaultc = "39";
+		static const char* black = "30";
+		static const char* red = "31";
+		static const char* green = "32";
+		static const char* yellow = "33";
+		static const char* blue = "34";
+		static const char* magenta = "35";
+		static const char* cyan = "36";
+		static const char* white = "37";
+		static const char* defaultc = "39";
 	};
 	
 	namespace bG {
-		const char* black = "40";
-		const char* red = "41";
-		const char* green = "42";
-		const char* yellow = "43";
-		const char* blue = "44";
-		const char* magenta = "45";
-		const char* cyan = "46";
-		const char* white = "47";
+		static const char* black = "40";
+		static const char* red = "41";
+		static const char* green = "42";
+		static const char* yellow = "43";
+		static const char* blue = "44";
+		static const char* magenta = "45";
+		static const char* cyan = "46";
+		static const char* white = "47";
 	};
 	
 	namespace sT {
-		const char* normal = "0";
-		const char* bold = "1";
-		const char* dim = "2";
+		static const char* normal = "0";
+		static const char* bold = "1";
+		static const char* dim = "2";
 	};
 	
-	std::string getColor(const char* forground = fG::defaultc, const char* background = "") {
+	inline std::string getColor(const char* forground = fG::defaultc, const char* background = "") {
 		std::string str;
 		str += init;
 		str += forground;
@@ -59,7 +59,7 @@ namespace cT {
 		return str;
 	}
 	
-	std::string getStyle(const char* style = sT::normal) {
+	inline std::string getStyle(const char* style = sT::normal) {
 		std::string str;
 		str += init;
 		str += style;
@@ -72,7 +72,7 @@ namespace cT {
 		return str;
 	}
 	
-	std::string print(const char* text, const char* forground = fG::defaultc, const char* style = sT::normal, const char* background = "") {
+	inline std::string print(const char* text, const char* forground = fG::defaultc, const char* style = sT::normal, const char* background = "") {
 		std::string str;
 		str += getColor(forground, background);
 		str += text;
@@ -81,4 +81,4 @@ namespace cT {
 	}
 };
 
-#endif /* ColorText_h */
+#endif /* COLORTEXT_HPP */
