@@ -137,11 +137,11 @@ void Wall::run(bool getOff) {
 				}
 			}
 		} else {
-			g_cProc->mainTask() = g_cProc->task(g_cProc->mainPid());
 			getEnginePointers();
 			off->engine.m_dwCEngineClientBase = mem->read<uint64_t>(off->engine.m_dwCEngineClient);
 		}
 		g_cProc->mainPid() = g_cProc->get("csgo_osx64");
+		g_cProc->mainTask() = g_cProc->task(g_cProc->mainPid());
 		usleep(refreshRate); // 800
 	}
 	
