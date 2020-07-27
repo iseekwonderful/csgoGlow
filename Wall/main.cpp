@@ -16,7 +16,7 @@
  ./Wall [-f <max flash alpha>] [-r <refresh rate>] [-t] [-o] [-h]
  
  -f <flash alpha>	: Antiflash alpha max amount (default: 100.0, disable: -1, range: [0-2700])
- -r <refresh rate>	: Refresh rate in microseconds (default: 2000.0)
+ -r <refresh rate>	: Refresh rate in microseconds (default: 1000.0)
  -t			        : Disables teammate glow
  -o			        : Get new offsets (only use with -insecure launch option flag in CSGO)
  -h			        : Display this message
@@ -44,7 +44,7 @@ void usage(const char* exec) {
 
 int main(int argc, char** argv) {
 	
-	double refreshRate = 2000.0f;
+	double refreshRate = 1000.0f;
 	double maxFlash = 100.0f;
 	int opt;
 	bool getOffsets = false;

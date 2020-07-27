@@ -72,11 +72,11 @@ public:
 	void run(bool getOff = false);
 
 private:
-	void stopThread();
 	void applyEntityGlow(int iTeamNum);
 	void getOffsets();
 	void getEnginePointers();
 	void getClientPointers();
+	void stopThread();
 };
 
 #endif /* WALL_HPP */

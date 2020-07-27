@@ -27,12 +27,13 @@ Wall::Wall(double refreshRate, double maxFlash, bool noTeammates) {
 	
 	if (g_cProc->mainPid() != -1){
 		printf("Found CSGO's PID\t\t= %s\n", cT::print(std::to_string(g_cProc->mainPid()).c_str(), cT::fG::green, cT::sT::bold).c_str());
-		g_cProc->mainTask() = g_cProc->task(g_cProc->mainPid());
 	} else {
 		printf("%s\n", cT::print("Error: Can't find CSGO's PID", cT::fG::red, cT::sT::bold).c_str());
 		deinit();
 		exit(0);
 	}
+	
+	g_cProc->mainTask() = g_cProc->task(g_cProc->mainPid());
 	
 	if (g_cProc->mainTask()){
 		g_cProc->getModule(g_cProc->mainTask(), &engine_moduleStartAddress, &engine_moduleLength, "/engine.dylib");
@@ -141,22 +142,10 @@ void Wall::run(bool getOff) {
 			off->engine.m_dwCEngineClientBase = mem->read<uint64_t>(off->engine.m_dwCEngineClient);
 		}
 		g_cProc->mainPid() = g_cProc->get("csgo_osx64");
-		g_cProc->mainTask() = g_cProc->task(g_cProc->mainPid());
 		usleep(refreshRate); // 800
 	}
 	
 	stop.store(true);
-}
-
-void Wall::stopThread() {
-	std::string str;
-	while (!stop.load()) {
-		std::cin >> str;
-		if (str == "q" || str == "quit" || str == "stop" || str == "exit") {
-			stop.store(true);
-		}
-		usleep(refreshRate);
-	}
 }
 
 void Wall::applyEntityGlow(int iTeamNum) {
@@ -174,11 +163,8 @@ void Wall::applyEntityGlow(int iTeamNum) {
 		
 		// Anti flash
 		if (off->client.m_dwLocalPlayerBase == entityPointer) {
-			if (maxFlash != -1) {
-				if (mem->read<double>(entityPointer + off->client.m_dFlashAlpha) > maxFlash) {
-					mem->write<double>(entityPointer + off->client.m_dFlashAlpha, maxFlash);
-				}
-				continue;
+			if (maxFlash != -1 && mem->read<double>(entityPointer + off->client.m_dFlashAlpha) > maxFlash) {
+				mem->write<double>(entityPointer + off->client.m_dFlashAlpha, maxFlash);
 			}
 			continue;
 		}
@@ -187,7 +173,7 @@ void Wall::applyEntityGlow(int iTeamNum) {
 			
 			int team = mem->read<int>(entityPointer + off->client.m_iTeam);
 			
-			if (noTeammates && entityPointer != off->client.m_dwLocalPlayerBase && team == iTeamNum)
+			if (noTeammates && team == iTeamNum)
 				continue;
 			
 			health = mem->read<int>(entityPointer + off->client.m_iHealth);
@@ -218,7 +204,7 @@ void Wall::applyEntityGlow(int iTeamNum) {
 					
 					// Enables Glow
 					glow.RenderWhenOccluded = true;
-					//glow.RenderWhenUnoccluded = false;
+					glow.RenderWhenUnoccluded = false;
 					mem->write<sGlowEntity>(glowPointer, glow);
 				}
 			}
@@ -245,7 +231,7 @@ void Wall::getOffsets() {
 	std::vector<int> glowIndexes;
 	
 	for (int i = 0; i < 64; ++i) {
-		for (int j = 0; j < 64; ++j){
+		for (int j = 0; j < mem->read<int>(off->engine.m_dwCEngineClientBase + off->engine.m_iGetMaxClients); ++j){
 			entityPointer = mem->read<uint64_t>(off->client.m_dwEntityList + (off->client.m_dwEntityStructSize * j));
 			
 			if (entityPointer <= 0x0 || entityPointer == 0)
@@ -256,12 +242,12 @@ void Wall::getOffsets() {
 		}
 		
 		for (int j = 1; j < glowIndexes.size(); ++j) {
-			
 			if (glowIndexes[j] > 1 && glowIndexes[j] < 60)
 				isValid = true;
 			else
 				isValid = false;
 		}
+		
 		glowIndexes.clear();
 		
 		if (isValid) {
@@ -271,7 +257,7 @@ void Wall::getOffsets() {
 			printf("uint64_t %s\t= %s0x%llx%s\n\n", cT::print("m_iShotFired", cT::fG::yellow).c_str(), cT::getColor(cT::fG::green).c_str(), off->client.m_iShotFired + i, cT::getStyle(cT::sT::bold).c_str());
 			return;
 		}
-		usleep(1000);
+		usleep(refreshRate);
 	}
 	
 	if (!isValid) {
@@ -324,6 +310,17 @@ void Wall::getClientPointers() {
 	 
 	 printf("Player Resource: 0x%llx\n", off->client.m_dwPlayerResource);
 	 */
+}
+
+void Wall::stopThread() {
+	std::string str;
+	while (!stop.load()) {
+		std::cin >> str;
+		if (str == "q" || str == "quit" || str == "stop" || str == "exit") {
+			stop.store(true);
+		}
+		usleep(refreshRate);
+	}
 }
 
 std::atomic<bool> Wall::stop{false};
