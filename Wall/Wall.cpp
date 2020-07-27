@@ -122,7 +122,7 @@ void Wall::run(bool getOff) {
 	int i_teamNum = 0;
 	
 	while (g_cProc->mainPid() != -1 && !stop.load()) {
-		if (g_cProc->mainTask() != 0 && off->engine.m_dwCEngineClientBase != 0x0) {
+		if (off->engine.m_dwCEngineClientBase != 0x0) {
 			if (mem->read<int>(off->engine.m_dwCEngineClientBase + off->engine.m_dwIsInGame) == 6) {
 				off->client.m_dwLocalPlayerBase = mem->read<uint64_t>(off->client.m_dwLocalPlayer);
 				if (off->client.m_dwLocalPlayerBase != 0x0 && off->client.m_dwGlowObjectLoopStartBase != 0x0 ) {
