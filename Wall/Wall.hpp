@@ -41,21 +41,21 @@ class Wall {
 		bool isValidGlowEntity(uint64_t ptr);
 	};
 	
-	mach_vm_address_t engine_moduleStartAddress;
-	mach_vm_address_t client_moduleStartAddress;
-	
-	off_t engine_moduleLength = 0;
-	off_t client_moduleLength = 0;
-	
 	Process* g_cProc = nullptr;
 	MemMngr* mem = nullptr;
 	sOffsets* off = nullptr;
 	Scanner* engineScanner = nullptr;
 	Scanner* clientScanner = nullptr;
-	
 	sGlowEntity* glow = nullptr;
+	
 	uint64_t glowPointer;
 	uint64_t entityPointer;
+	
+	mach_vm_address_t engine_moduleStartAddress;
+	off_t engine_moduleLength = 0;
+	
+	mach_vm_address_t client_moduleStartAddress;
+	off_t client_moduleLength = 0;
 	
 	double refreshRate = 1000.0f;
 	double maxFlash = 100.0f;
