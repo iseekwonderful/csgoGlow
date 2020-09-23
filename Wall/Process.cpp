@@ -13,15 +13,18 @@ Process::Process() {}
 
 Process::~Process() {}
 
-pid_t& Process::mainPid() {
+pid_t& Process::mainPid()
+{
 	return mainPid_;
 }
 
-task_t& Process::mainTask() {
+task_t& Process::mainTask()
+{
 	return mainTask_;
 }
 
-int Process::get(const char* procname) {
+int Process::get(const char* procname)
+{
 	int numberOfProcesses = proc_listpids(PROC_ALL_PIDS, 0, NULL, 0);
 	pid_t pids[numberOfProcesses];
 	proc_listpids(PROC_ALL_PIDS, 0, pids, (int)sizeof(pids));
@@ -36,13 +39,15 @@ int Process::get(const char* procname) {
 	return -1;
 }
 
-int Process::task(pid_t pid) {
+int Process::task(pid_t pid)
+{
 	task_t task = 0;
 	task_for_pid(current_task(), pid, &task);
 	return task;
 }
 
-void Process::getModule(task_t task, mach_vm_address_t* start, off_t* length, const char* module, Byte* buffer, bool readBuffer) {
+void Process::getModule(task_t task, mach_vm_address_t* start, off_t* length, const char* module, Byte* buffer, bool readBuffer)
+{
 	struct task_dyld_info dyld_info;
 	mach_vm_address_t address = 0;
 	mach_msg_type_number_t count = TASK_DYLD_INFO_COUNT;

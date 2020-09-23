@@ -37,14 +37,15 @@ class Wall {
 		bool FullBloom;
 		char unk2[0x15];
 		
-		bool isValidGlowEntity() {
-			return entityPointer != 0x0;
-		}
-		
-		bool isValidGlowEntity(uint64_t ptr) {
-			return (entityPointer != 0x0) && (entityPointer == ptr);
-		}
+		bool isValidGlowEntity();
+		bool isValidGlowEntity(uint64_t ptr);
 	};
+	
+	mach_vm_address_t engine_moduleStartAddress;
+	mach_vm_address_t client_moduleStartAddress;
+	
+	off_t engine_moduleLength = 0;
+	off_t client_moduleLength = 0;
 	
 	Process* g_cProc = nullptr;
 	MemMngr* mem = nullptr;
@@ -52,11 +53,9 @@ class Wall {
 	Scanner* engineScanner = nullptr;
 	Scanner* clientScanner = nullptr;
 	
-	off_t engine_moduleLength = 0;
-	mach_vm_address_t engine_moduleStartAddress;
-	
-	off_t client_moduleLength = 0;
-	mach_vm_address_t client_moduleStartAddress;
+	sGlowEntity* glow = nullptr;
+	uint64_t glowPointer;
+	uint64_t entityPointer;
 	
 	double refreshRate = 1000.0f;
 	double maxFlash = 100.0f;
@@ -68,10 +67,10 @@ public:
 	explicit Wall(double refreshRate = 1000.0f, double maxFlash = 100.0f, bool noTeammates = false);
 	~Wall();
 	
-	void deinit();
 	void run(bool getOff = false);
 
 private:
+	void deinit();
 	void applyEntityGlow(int iTeamNum);
 	void getOffsets();
 	void getEnginePointers();

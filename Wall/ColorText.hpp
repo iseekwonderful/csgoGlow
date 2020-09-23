@@ -47,7 +47,8 @@ namespace cT {
 		static const char* dim = "2";
 	};
 	
-	inline std::string getColor(const char* forground = fG::defaultc, const char* background = "") {
+	inline std::string getColor(const char* forground = fG::defaultc, const char* background = "")
+	{
 		std::string str;
 		str += init;
 		str += forground;
@@ -59,7 +60,8 @@ namespace cT {
 		return str;
 	}
 	
-	inline std::string getStyle(const char* style = sT::normal) {
+	inline std::string getStyle(const char* style = sT::normal)
+	{
 		std::string str;
 		str += init;
 		str += style;
@@ -72,7 +74,8 @@ namespace cT {
 		return str;
 	}
 	
-	inline std::string print(const char* text, const char* forground = fG::defaultc, const char* style = sT::normal, const char* background = "") {
+	inline std::string print(const char* text, const char* forground = fG::defaultc, const char* style = sT::normal, const char* background = "")
+	{
 		std::string str;
 		str += getColor(forground, background);
 		str += text;

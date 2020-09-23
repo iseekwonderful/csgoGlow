@@ -31,7 +31,8 @@ public:
 };
 
 template <typename type>
-type MemMngr::read(mach_vm_address_t address, size_t extraSize, bool debug) {
+type MemMngr::read(mach_vm_address_t address, size_t extraSize, bool debug)
+{
 	if (debug)
 		printf("read: 0x%lx\n", (vm_address_t)address);
 	vm_offset_t data;
@@ -46,7 +47,8 @@ type MemMngr::read(mach_vm_address_t address, size_t extraSize, bool debug) {
 }
 
 template <typename type>
-bool MemMngr::write(mach_vm_address_t address, type data, bool debug) {
+bool MemMngr::write(mach_vm_address_t address, type data, bool debug)
+{
 	if (debug)
 		printf("read: 0x%lx\n", (vm_address_t)address);
 	if (address == 0x0)

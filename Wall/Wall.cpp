@@ -12,7 +12,8 @@
 
 #include "Wall.hpp"
 
-Wall::Wall(double refreshRate, double maxFlash, bool noTeammates) {
+Wall::Wall(double refreshRate, double maxFlash, bool noTeammates)
+{
 	this->refreshRate = refreshRate;
 	this->maxFlash = maxFlash;
 	this->noTeammates = noTeammates;
@@ -97,25 +98,13 @@ Wall::Wall(double refreshRate, double maxFlash, bool noTeammates) {
 	}
 }
 
-Wall::~Wall() {
+Wall::~Wall()
+{
 	deinit();
 }
 
-void Wall::deinit() {
-	stop.store(true);
-	if (g_cProc)
-		delete g_cProc;
-	if (mem)
-		delete mem;
-	if (off)
-		delete off;
-	if (engineScanner)
-		delete engineScanner;
-	if (clientScanner)
-		delete clientScanner;
-}
-
-void Wall::run(bool getOff) {
+void Wall::run(bool getOff)
+{
 	std::thread s_thread(&Wall::stopThread, this);
 	s_thread.detach();
 	
@@ -148,10 +137,23 @@ void Wall::run(bool getOff) {
 	stop.store(true);
 }
 
-void Wall::applyEntityGlow(int iTeamNum) {
-	sGlowEntity glow;
-	uint64_t glowPointer;
-	uint64_t entityPointer;
+void Wall::deinit()
+{
+	stop.store(true);
+	if (g_cProc)
+		delete g_cProc;
+	if (mem)
+		delete mem;
+	if (off)
+		delete off;
+	if (engineScanner)
+		delete engineScanner;
+	if (clientScanner)
+		delete clientScanner;
+}
+
+void Wall::applyEntityGlow(int iTeamNum)
+{
 	int health;
 	
 	for (int i = 0; i < mem->read<int>(off->engine.m_dwCEngineClientBase + off->engine.m_iGetMaxClients); ++i){
@@ -184,35 +186,36 @@ void Wall::applyEntityGlow(int iTeamNum) {
 			glowPointer = off->client.m_dwGlowObjectLoopStartBase + (off->client.m_dwGlowStructSize * mem->read<int>(entityPointer + off->client.m_iGlowIndex));
 			
 			if (glowPointer != 0x0) {
-				glow = mem->read<sGlowEntity>(glowPointer);
+				*glow = mem->read<sGlowEntity>(glowPointer);
 				
-				if (glow.isValidGlowEntity(entityPointer)) {
+				if (glow->isValidGlowEntity(entityPointer)) {
 					
 					if (team != iTeamNum) {
 						// Enemy glow colors
-						glow.r = float((100 - health)/100.0);
-						glow.g = float((health)/100.0);
-						glow.b = 0.0f;
-						glow.a = 0.6f;
+						glow->r = float((100 - health)/100.0);
+						glow->g = float((health)/100.0);
+						glow->b = 0.0f;
+						glow->a = 0.6f;
 					} else {
 						// Teammates glow colors
-						glow.r = float((100 - health)/100.0);
-						glow.g = 0.0f;
-						glow.b = float((health)/100.0);
-						glow.a = 0.6f;
+						glow->r = float((100 - health)/100.0);
+						glow->g = 0.0f;
+						glow->b = float((health)/100.0);
+						glow->a = 0.6f;
 					}
 					
 					// Enables Glow
-					glow.RenderWhenOccluded = true;
-					glow.RenderWhenUnoccluded = false;
-					mem->write<sGlowEntity>(glowPointer, glow);
+					glow->RenderWhenOccluded = true;
+					glow->RenderWhenUnoccluded = false;
+					mem->write<sGlowEntity>(glowPointer, *glow);
 				}
 			}
 		}
 	}
 }
 
-void Wall::getOffsets() {
+void Wall::getOffsets()
+{
 	//
 	// ** SHOULD NOT BE RUN ON VAC SERVERS **
 	//
@@ -266,7 +269,8 @@ void Wall::getOffsets() {
 	}
 }
 
-void Wall::getEnginePointers() {
+void Wall::getEnginePointers()
+{
 	off->engine.m_dwCEngineClient = engine_moduleStartAddress + engineScanner->getPointer(
 																						  (Byte*)"\x55\x48\x89\xE5\x48\x8B\x00\x00\x00\x00\x00\x48\x83\x00\x00\x5D\xC3\x66\x66\x66\x66\x66\x66\x2E\x0F\x1F\x84\x00\x00\x00\x00\x00",
 																						  "xxxxxx?????xx??xxxxxxxxxxxxxxxxx",
@@ -274,7 +278,8 @@ void Wall::getEnginePointers() {
 																						  ) + 0x4;
 }
 
-void Wall::getClientPointers() {
+void Wall::getClientPointers()
+{
 	off->client.m_dwLocalPlayer = client_moduleStartAddress + clientScanner->getPointer(
 																						(Byte*)"\x89\xD6\x41\x89\x00\x49\x89\x00\x48\x8B\x1D\x00\x00\x00\x00\x48\x85\xDB\x74\x00",
 																						"xxxx?xx?xxx????xxxx?",
@@ -312,7 +317,8 @@ void Wall::getClientPointers() {
 	 */
 }
 
-void Wall::stopThread() {
+void Wall::stopThread()
+{
 	std::string str;
 	while (!stop.load()) {
 		std::cin >> str;
@@ -321,6 +327,16 @@ void Wall::stopThread() {
 		}
 		usleep(refreshRate);
 	}
+}
+
+bool Wall::sGlowEntity::isValidGlowEntity()
+{
+	return entityPointer != 0x0;
+}
+
+bool Wall::sGlowEntity::isValidGlowEntity(uint64_t ptr)
+{
+	return entityPointer != 0x0 && entityPointer == ptr;
 }
 
 std::atomic<bool> Wall::stop{false};
