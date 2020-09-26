@@ -186,28 +186,28 @@ void Wall::applyEntityGlow(int iTeamNum)
 			glowPointer = off->client.m_dwGlowObjectLoopStartBase + (off->client.m_dwGlowStructSize * mem->read<int>(entityPointer + off->client.m_iGlowIndex));
 			
 			if (glowPointer != 0x0) {
-				*glow = mem->read<sGlowEntity>(glowPointer);
+				glow = mem->read<sGlowEntity>(glowPointer);
 				
-				if (glow->isValidGlowEntity(entityPointer)) {
+				if (glow.isValidGlowEntity(entityPointer)) {
 					
 					if (team != iTeamNum) {
 						// Enemy glow colors
-						glow->r = float((100 - health)/100.0);
-						glow->g = float((health)/100.0);
-						glow->b = 0.0f;
-						glow->a = 0.6f;
+						glow.r = float((100 - health)/100.0);
+						glow.g = float((health)/100.0);
+						glow.b = 0.0f;
+						glow.a = 0.6f;
 					} else {
 						// Teammates glow colors
-						glow->r = float((100 - health)/100.0);
-						glow->g = 0.0f;
-						glow->b = float((health)/100.0);
-						glow->a = 0.6f;
+						glow.r = float((100 - health)/100.0);
+						glow.g = 0.0f;
+						glow.b = float((health)/100.0);
+						glow.a = 0.6f;
 					}
 					
 					// Enables Glow
-					glow->RenderWhenOccluded = true;
-					glow->RenderWhenUnoccluded = false;
-					mem->write<sGlowEntity>(glowPointer, *glow);
+					glow.RenderWhenOccluded = true;
+					glow.RenderWhenUnoccluded = false;
+					mem->write<sGlowEntity>(glowPointer, glow);
 				}
 			}
 		}

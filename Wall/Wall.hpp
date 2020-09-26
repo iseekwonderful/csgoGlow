@@ -46,7 +46,7 @@ class Wall {
 	sOffsets* off = nullptr;
 	Scanner* engineScanner = nullptr;
 	Scanner* clientScanner = nullptr;
-	sGlowEntity* glow = nullptr;
+	sGlowEntity glow;
 	
 	uint64_t glowPointer;
 	uint64_t entityPointer;
