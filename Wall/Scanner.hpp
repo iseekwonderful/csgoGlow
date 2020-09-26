@@ -1,12 +1,12 @@
 //
 //  Scanner.hpp
+//  Wall
 //
 //  Created by Andre Kalisch on 23.09.16.
 //  Copyright © 2016 Andre Kalisch. All rights reserved.
 //
 //  Edited by Fricker95 on 1/1/20.
 
-#pragma once
 #ifndef SCANNER_HPP
 #define SCANNER_HPP
 

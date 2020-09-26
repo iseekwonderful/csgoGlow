@@ -89,9 +89,9 @@ int main(int argc, char** argv) {
 	}
 	
 	Wall wall(refreshRate, maxFlash, noTeammates);
-	
+
 	wall.run(getOffsets);
-	
+
 	std::system("clear");
 	
 	return 0;

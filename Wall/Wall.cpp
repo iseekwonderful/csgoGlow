@@ -1,5 +1,5 @@
 //
-//  Wall.hpp
+//  Wall.cpp
 //  Wall
 //
 //  for csgo wall hack
@@ -23,6 +23,7 @@ Wall::Wall(double refreshRate, double maxFlash, bool noTeammates)
 	g_cProc = new Process;
 	mem = new MemMngr(g_cProc);
 	off = new sOffsets;
+	glow = new sGlowEntity;
 	
 	g_cProc->mainPid() = g_cProc->get("csgo_osx64");
 	
@@ -150,11 +151,16 @@ void Wall::deinit()
 		delete engineScanner;
 	if (clientScanner)
 		delete clientScanner;
+	if (glow) {
+		delete glow;
+	}
 }
 
 void Wall::applyEntityGlow(int iTeamNum)
 {
 	int health;
+	int team;
+	bool cmp = false;
 	
 	for (int i = 0; i < mem->read<int>(off->engine.m_dwCEngineClientBase + off->engine.m_iGetMaxClients); ++i){
 		
@@ -173,41 +179,34 @@ void Wall::applyEntityGlow(int iTeamNum)
 		
 		if (!mem->read<bool>(entityPointer + off->client.m_bDormant) && !mem->read<bool>(entityPointer + off->client.m_bLifeState)) {
 			
-			int team = mem->read<int>(entityPointer + off->client.m_iTeam);
+			team = mem->read<int>(entityPointer + off->client.m_iTeam);
 			
 			if (noTeammates && team == iTeamNum)
 				continue;
 			
 			health = mem->read<int>(entityPointer + off->client.m_iHealth);
 			
-			if (health == 0)
-				health = 100;
+			health += (health == 0 ? 100 : health);
 			
 			glowPointer = off->client.m_dwGlowObjectLoopStartBase + (off->client.m_dwGlowStructSize * mem->read<int>(entityPointer + off->client.m_iGlowIndex));
 			
 			if (glowPointer != 0x0) {
-				glow = mem->read<sGlowEntity>(glowPointer);
+				*glow = mem->read<sGlowEntity>(glowPointer);
 				
-				if (glow.isValidGlowEntity(entityPointer)) {
+				if (glow->isValidGlowEntity(entityPointer)) {
 					
-					if (team != iTeamNum) {
-						// Enemy glow colors
-						glow.r = float((100 - health)/100.0);
-						glow.g = float((health)/100.0);
-						glow.b = 0.0f;
-						glow.a = 0.6f;
-					} else {
-						// Teammates glow colors
-						glow.r = float((100 - health)/100.0);
-						glow.g = 0.0f;
-						glow.b = float((health)/100.0);
-						glow.a = 0.6f;
-					}
+					cmp = team != iTeamNum;
+					
+					// Glow Colors
+					glow->r = float((100 - health)/100.0);
+					glow->g = cmp ? float((health)/100.0) : 0.0f;
+					glow->b = cmp ? 0.0f : float((health)/100.0);
+					glow->a = 0.6f;
 					
 					// Enables Glow
-					glow.RenderWhenOccluded = true;
-					glow.RenderWhenUnoccluded = false;
-					mem->write<sGlowEntity>(glowPointer, glow);
+					glow->RenderWhenOccluded = true;
+					glow->RenderWhenUnoccluded = false;
+					mem->write<sGlowEntity>(glowPointer, *glow);
 				}
 			}
 		}
@@ -244,12 +243,8 @@ void Wall::getOffsets()
 				glowIndexes.emplace_back(mem->read<int>(entityPointer + off->client.m_iGlowIndex + i));
 		}
 		
-		for (int j = 1; j < glowIndexes.size(); ++j) {
-			if (glowIndexes[j] > 1 && glowIndexes[j] < 60)
-				isValid = true;
-			else
-				isValid = false;
-		}
+		for (int j = 1; j < glowIndexes.size(); ++j)
+			isValid = (glowIndexes[j] > 1 && glowIndexes[j] < 60 ? true : false);
 		
 		glowIndexes.clear();
 		

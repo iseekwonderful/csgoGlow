@@ -1,12 +1,11 @@
 //
-//  ColorTextchpp
+//  ColorText.hpp
 //  Wall
 //
 //  Created by Nicolas Fricker on 6/16/20.
 //  Copyright © 2020 nadp. All rights reserved.
 //
 
-#pragma once
 #ifndef COLORTEXT_HPP
 #define COLORTEXT_HPP
 
@@ -52,10 +51,12 @@ namespace cT {
 		std::string str;
 		str += init;
 		str += forground;
-		if (strcmp(background, "")) {
-			str += ";";
-			str += background;
-		}
+		
+		bool cmp = strcmp(background, "");
+		
+		str += (cmp ? ";": "");
+		str += (cmp ? background: "");
+		
 		str += term;
 		return str;
 	}
@@ -66,11 +67,13 @@ namespace cT {
 		str += init;
 		str += style;
 		str += term;
-		if (strcmp(style, sT::normal)) {
-			str += init;
-			str += sT::normal;
-			str += term;
-		}
+		
+		bool cmp = strcmp(style, sT::normal);
+		
+		str += (cmp ? init: "");
+		str += (cmp ? sT::normal: "");
+		str += (cmp ? term: "");
+		
 		return str;
 	}
 	

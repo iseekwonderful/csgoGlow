@@ -1,12 +1,12 @@
 //
 //  Process.hpp
+//  Wall
 //
 //  Created by Andre Kalisch on 30.08.16.
 //  Copyright © 2016 aKalisch. All rights reserved.
 //
 //  Edited by Fricker95 on 1/1/20.
 
-#pragma once
 #ifndef PROCESS_HPP
 #define PROCESS_HPP
 

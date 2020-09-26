@@ -6,7 +6,6 @@
 //  Copyright © 2020 Fricker95. All rights reserved.
 //
 
-#pragma once
 #ifndef OFFSETS_HPP
 #define OFFSETS_HPP
 

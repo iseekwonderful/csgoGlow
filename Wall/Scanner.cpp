@@ -1,5 +1,6 @@
 //
 //  Scanner.cpp
+//  Wall
 //
 //  Created by Andre Kalisch on 23.09.16.
 //  Copyright © 2016 Andre Kalisch. All rights reserved.

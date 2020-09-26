@@ -1,19 +1,19 @@
 //
 //  MemMngr.hpp
+//  Wall
 //
 //  Created by Andre Kalisch on 27.09.16.
 //  Copyright © 2016 Andre Kalisch. All rights reserved.
 //
 //  Edited by Fricker95 on 1/1/20.
 
-#pragma once
 #ifndef MEMMNGR_HPP
 #define MEMMNGR_HPP
 
 #include "Process.hpp"
 
 class MemMngr {
-	struct Temp_t{
+	struct Temp_t {
 		char buffer[256];
 	};
 	Process* g_cProc = nullptr;

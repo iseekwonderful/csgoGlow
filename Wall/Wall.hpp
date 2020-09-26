@@ -10,7 +10,6 @@
 //
 //  Edited by Fricker95 on 1/1/20.
 
-#pragma once
 #ifndef WALL_HPP
 #define WALL_HPP
 
@@ -46,7 +45,7 @@ class Wall {
 	sOffsets* off = nullptr;
 	Scanner* engineScanner = nullptr;
 	Scanner* clientScanner = nullptr;
-	sGlowEntity glow;
+	sGlowEntity* glow = nullptr;
 	
 	uint64_t glowPointer;
 	uint64_t entityPointer;
