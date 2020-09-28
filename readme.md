@@ -34,8 +34,7 @@ We believe that you know what you are doing. You should get this software for fr
 
 
 ## Usage: 
-	sudo -s
-	./Wall [-f <max flash alpha>] [-r <refresh rate>] [-t] [-o] [-h]
+	sudo ./Wall [-f <max flash alpha>] [-r <refresh rate>] [-t] [-o] [-h]
 
 	-f <flash alpha>	: Antiflash alpha max amount (default: 100.0, disable: -1, range: [0-2700])
 	-r <refresh rate>	: Refresh rate in microseconds (default: 1000.0)

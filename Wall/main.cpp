@@ -12,8 +12,7 @@
 
 /*
  Usage:
- sudo -s
- ./Wall [-f <max flash alpha>] [-r <refresh rate>] [-t] [-o] [-h]
+ sudo ./Wall [-f <max flash alpha>] [-r <refresh rate>] [-t] [-o] [-h]
  
  -f <flash alpha>	: Antiflash alpha max amount (default: 100.0, disable: -1, range: [0-2700])
  -r <refresh rate>	: Refresh rate in microseconds (default: 1000.0)
@@ -33,8 +32,7 @@
 
 void usage(const char* exec) {
 	printf("%s\n", cT::print("\nUsage:", cT::fG::green).c_str());
-	printf("\tsudo -s\n");
-	printf("\t%s [-f <max flash alpha>] [-r <refresh rate>] [-t] [-o] [-h]\n\n", cT::print(exec, cT::fG::yellow).c_str());
+	printf("\tsudo %s [-f <max flash alpha>] [-r <refresh rate>] [-t] [-o] [-h]\n\n", cT::print(exec, cT::fG::yellow).c_str());
 	printf("\t-f <flash alpha>\t: Antiflash alpha max amount (default: 100.0, disable: -1, range: [0-2700])\n");
 	printf("\t-r <refresh rate>\t: Refresh rate in microseconds (default: 1000.0)\n");
 	printf("\t-t\t\t\t: Disables teammate glow\n");
