@@ -201,7 +201,7 @@ void Wall::applyEntityGlow(int iTeamNum)
 					glow->r = float((100 - health)/100.0);
 					glow->g = cmp ? float((health)/100.0) : 0.0f;
 					glow->b = cmp ? 0.0f : float((health)/100.0);
-					glow->a = 0.6f;
+					glow->a = 0.5f;
 					
 					// Enables Glow
 					glow->RenderWhenOccluded = true;
