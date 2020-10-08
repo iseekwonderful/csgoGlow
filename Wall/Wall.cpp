@@ -119,7 +119,9 @@ void Wall::run(bool getOff)
 					i_teamNum = mem->read<int>(off->client.m_dwLocalPlayerBase + off->client.m_iTeam);
 					if (getOff) {
 						getOffsets();
+						deinit();
 						stop.store(true);
+						exit(0);
 					}
 					applyEntityGlow(i_teamNum);
 				} else {
@@ -136,6 +138,7 @@ void Wall::run(bool getOff)
 	}
 	
 	stop.store(true);
+	std::system("clear");
 }
 
 void Wall::deinit()
@@ -170,8 +173,8 @@ void Wall::applyEntityGlow(int iTeamNum)
 			continue;
 		
 		// Anti flash
-		if (off->client.m_dwLocalPlayerBase == entityPointer) {
-			if (maxFlash != -1 && mem->read<double>(entityPointer + off->client.m_dFlashAlpha) > maxFlash) {
+		if (maxFlash != -1 && off->client.m_dwLocalPlayerBase == entityPointer) {
+			if (mem->read<double>(entityPointer + off->client.m_dFlashAlpha) > maxFlash) {
 				mem->write<double>(entityPointer + off->client.m_dFlashAlpha, maxFlash);
 			}
 			continue;
@@ -223,8 +226,7 @@ void Wall::getOffsets()
 	// - launch csgo with flag: -insecure
 	// - launch game with bots.
 	// - in terminal:
-	// - sudo -s
-	// - ./Wall -o
+	// - sudo ./Wall -o
 	//
 	
 	uint64_t entityPointer;
@@ -236,7 +238,7 @@ void Wall::getOffsets()
 		for (int j = 0; j < mem->read<int>(off->engine.m_dwCEngineClientBase + off->engine.m_iGetMaxClients); ++j){
 			entityPointer = mem->read<uint64_t>(off->client.m_dwEntityList + (off->client.m_dwEntityStructSize * j));
 			
-			if (entityPointer <= 0x0 || entityPointer == 0)
+			if (entityPointer <= 0x0)
 				continue;
 			
 			if (!mem->read<bool>(entityPointer + off->client.m_bDormant) && !mem->read<bool>(entityPointer + off->client.m_bLifeState))
@@ -252,7 +254,7 @@ void Wall::getOffsets()
 			printf("\nuint64_t %s\t\t= %s0x%llx%s\n", cT::print("m_iGlowIndex", cT::fG::yellow).c_str(), cT::getColor(cT::fG::green).c_str(), off->client.m_iGlowIndex + i, cT::getStyle(cT::sT::bold).c_str());
 			printf("uint64_t %s\t\t= %s0x%llx%s\n", cT::print("m_dFlashAlpha", cT::fG::yellow).c_str(), cT::getColor(cT::fG::green).c_str(), off->client.m_dFlashAlpha + i, cT::getStyle(cT::sT::bold).c_str());
 			printf("uint64_t %s\t= %s0x%llx%s\n\n", cT::print("m_fFlashDuration", cT::fG::yellow).c_str(), cT::getColor(cT::fG::green).c_str(), off->client.m_fFlashDuration + i, cT::getStyle(cT::sT::bold).c_str());
-			printf("uint64_t %s\t= %s0x%llx%s\n\n", cT::print("m_iShotFired", cT::fG::yellow).c_str(), cT::getColor(cT::fG::green).c_str(), off->client.m_iShotFired + i, cT::getStyle(cT::sT::bold).c_str());
+			printf("uint64_t %s\t\t= %s0x%llx%s\n\n", cT::print("m_iShotFired", cT::fG::yellow).c_str(), cT::getColor(cT::fG::green).c_str(), off->client.m_iShotFired + i, cT::getStyle(cT::sT::bold).c_str());
 			return;
 		}
 		usleep(refreshRate);
