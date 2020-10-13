@@ -3,7 +3,7 @@
 //  Wall
 //
 //  Created by Fricker95 on 6/16/20.
-//  Copyright © 2020 nadp. All rights reserved.
+//  Copyright © 2020 Fricker95. All rights reserved.
 //
 
 #ifndef COLORTEXT_HPP
